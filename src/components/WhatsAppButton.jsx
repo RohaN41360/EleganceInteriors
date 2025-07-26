@@ -24,7 +24,7 @@ const FloatingBtn = styled.a`
 `;
 
 const WhatsAppButton = () => (
-  <FloatingBtn href="https://wa.me/917499052825" target="_blank" rel="noopener noreferrer" title="Chat on WhatsApp">
+  <FloatingBtn href="https://wa.me/918806414374" target="_blank" rel="noopener noreferrer" title="Chat on WhatsApp">
     <FaWhatsapp />
   </FloatingBtn>
 );

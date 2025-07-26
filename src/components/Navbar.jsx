@@ -20,6 +20,14 @@ const NavContainer = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 0.7rem 1.5rem;
+  
+  @media (max-width: 768px) {
+    padding: 0.6rem 1rem;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 0.5rem 0.8rem;
+  }
 `;
 const Logo = styled.div`
   font-size: 2rem;
@@ -36,9 +44,20 @@ const LogoImg = styled.img`
   max-width: 180px;
   object-fit: contain;
   margin-right: 1.5rem;
+  
+  @media (max-width: 768px) {
+    height: 42px;
+    margin-right: 1rem;
+  }
+  
   @media (max-width: 600px) {
     height: 36px;
     margin-right: 0.7rem;
+  }
+  
+  @media (max-width: 480px) {
+    height: 32px;
+    margin-right: 0.5rem;
   }
 `;
 const LogoWrap = styled.div`
@@ -57,8 +76,17 @@ const LogoText = styled.div`
   margin-left: 0.1rem;
   font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
   opacity: 0.92;
+  
+  @media (max-width: 768px) {
+    font-size: 0.98rem;
+  }
+  
   @media (max-width: 600px) {
     font-size: 0.92rem;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 0.85rem;
   }
 `;
 const NavLinks = styled.div`
@@ -72,9 +100,11 @@ const NavLinks = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
+  
   @media (max-width: 900px) {
     gap: 1rem;
   }
+  
   @media (max-width: 700px) {
     display: none;
   }
@@ -92,6 +122,12 @@ const NavLink = styled(Link)`
   display: flex;
   align-items: center;
   gap: 0.4rem;
+  
+  @media (max-width: 900px) {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.95rem;
+  }
+  
   &:hover, &.active {
     background: #e6b17a22;
     color: #e6b17a;
@@ -109,9 +145,11 @@ const WhatsAppBtn = styled.a`
   margin-left: 1rem;
   transition: background 0.2s;
   box-shadow: 0 2px 8px rgba(37,211,102,0.10);
+  
   @media (max-width: 700px) {
     display: none;
   }
+  
   &:hover {
     background: #128c7e;
   }
@@ -123,12 +161,18 @@ const Hamburger = styled.button`
   color: #1a3c2e;
   font-size: 2rem;
   cursor: pointer;
+  
   @media (max-width: 700px) {
     display: block;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 1.8rem;
   }
 `;
 const DrawerOverlay = styled.div`
   display: none;
+  
   @media (max-width: 700px) {
     display: ${({ open }) => (open ? 'block' : 'none')};
     position: fixed;
@@ -142,6 +186,7 @@ const DrawerOverlay = styled.div`
 `;
 const Drawer = styled.div`
   display: none;
+  
   @media (max-width: 700px) {
     display: flex;
     flex-direction: column;
@@ -157,6 +202,11 @@ const Drawer = styled.div`
     padding: 2.5rem 1.5rem 1.5rem 1.5rem;
     transform: ${({ open }) => (open ? 'translateX(0)' : 'translateX(100%)')};
     transition: transform 0.25s cubic-bezier(.4,0,.2,1);
+    
+    @media (max-width: 480px) {
+      width: 80vw;
+      padding: 2rem 1.2rem 1.2rem 1.2rem;
+    }
   }
 `;
 const DrawerClose = styled.button`
@@ -167,11 +217,20 @@ const DrawerClose = styled.button`
   align-self: flex-end;
   margin-bottom: 2rem;
   cursor: pointer;
+  
+  @media (max-width: 480px) {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+  }
 `;
 const DrawerLinks = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  
+  @media (max-width: 480px) {
+    gap: 1.2rem;
+  }
 `;
 const DrawerWhatsAppBtn = styled.a`
   background: #25d366;
@@ -186,6 +245,14 @@ const DrawerWhatsAppBtn = styled.a`
   margin: 1.5rem auto 0 auto;
   box-shadow: 0 2px 8px rgba(37,211,102,0.10);
   transition: background 0.2s;
+  
+  @media (max-width: 480px) {
+    width: 50px;
+    height: 50px;
+    font-size: 1.8rem;
+    margin: 1.2rem auto 0 auto;
+  }
+  
   &:hover {
     background: #128c7e;
   }
@@ -196,6 +263,10 @@ const DrawerWhatsAppLabel = styled.div`
   font-size: 1rem;
   font-weight: 600;
   margin-top: 0.3rem;
+  
+  @media (max-width: 480px) {
+    font-size: 0.9rem;
+  }
 `;
 
 const Navbar = () => {

@@ -6,6 +6,7 @@ import Services from './components/Services';
 import Reviews from './components/Reviews';
 import Contact from './components/Contact';
 import WhatsAppButton from './components/WhatsAppButton';
+import ReviewUsButton from './components/ReviewUsButton';
 import OurProjects from './components/OurProjects';
 import './App.css';
 
@@ -20,6 +21,7 @@ function App() {
       <Reviews />
       <Contact />
       <WhatsAppButton />
+      <ReviewUsButton />
     </>
   );
 }

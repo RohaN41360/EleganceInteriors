@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { motion } from 'framer-motion';
 
 const heroImgUrl = 'https://res.cloudinary.com/dxw6gft9d/image/upload/v1752918067/elegance/img_o4dmjd.avif';
-const personImgUrl = 'https://static.wixstatic.com/media/6a53a1_0ccfa9d9b31c48819c357b57081c5f66~mv2.jpeg/v1/crop/x_27,y_0,w_905,h_1280/fill/w_812,h_1148,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/WhatsApp%20Image%202024-06-20%20at%2012_58_59%20AM.jpeg';
+const personImgUrl = 'https://res.cloudinary.com/dxw6gft9d/image/upload/q_auto,f_auto,w_400,h_400,c_fill,g_face/v1753545761/elegance/WhatsApp_Image_2025-07-26_at_9.23.03_PM_s5yjjw.jpg';
 
 const HeroSection = styled.section`
   min-height: 90vh;
@@ -14,8 +14,18 @@ const HeroSection = styled.section`
   background: url(${heroImgUrl}) center/cover no-repeat;
   color: #fff;
   text-align: center;
-  padding-top: 4rem;
+  padding: 4rem 1rem 2rem 1rem;
   overflow: hidden;
+  
+  @media (max-width: 768px) {
+    min-height: 80vh;
+    padding: 3rem 0.8rem 1.5rem 0.8rem;
+  }
+  
+  @media (max-width: 480px) {
+    min-height: 70vh;
+    padding: 2rem 0.6rem 1rem 0.6rem;
+  }
 `;
 const Overlay = styled.div`
   position: absolute;
@@ -31,17 +41,44 @@ const Content = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 0 1rem;
+  
+  @media (max-width: 768px) {
+    padding: 0 0.8rem;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 0 0.6rem;
+  }
 `;
 const Title = styled(motion.h1)`
   font-size: 2.8rem;
   font-weight: bold;
   margin-bottom: 1.2rem;
+  
+  @media (max-width: 768px) {
+    font-size: 2.2rem;
+    margin-bottom: 1rem;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 1.8rem;
+    margin-bottom: 0.8rem;
+  }
 `;
 const PersonImgWrap = styled(motion.div)`
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 0 auto 1.2rem auto;
+  
+  @media (max-width: 768px) {
+    margin-bottom: 1rem;
+  }
+  
+  @media (max-width: 480px) {
+    margin-bottom: 0.8rem;
+  }
 `;
 const PersonImg = styled.img`
   width: 140px;
@@ -51,14 +88,37 @@ const PersonImg = styled.img`
   box-shadow: 0 6px 32px 0 rgba(26,60,46,0.18), 0 1.5px 8px 0 rgba(230,177,122,0.12);
   border: 5px solid #fff;
   background: #fff;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  
+  @media (max-width: 768px) {
+    width: 120px;
+    height: 120px;
+  }
+  
   @media (max-width: 600px) {
-    width: 90px;
-    height: 90px;
+    width: 100px;
+    height: 100px;
+  }
+  
+  @media (max-width: 480px) {
+    width: 80px;
+    height: 80px;
   }
 `;
 const Subtitle = styled(motion.p)`
   font-size: 1.3rem;
   margin-bottom: 2rem;
+  
+  @media (max-width: 768px) {
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 1rem;
+    margin-bottom: 1.2rem;
+  }
 `;
 const CTAButton = styled(motion.a)`
   background: #e6b17a;
@@ -70,6 +130,17 @@ const CTAButton = styled(motion.a)`
   text-decoration: none;
   box-shadow: 0 2px 8px rgba(0,0,0,0.12);
   transition: background 0.2s;
+  
+  @media (max-width: 768px) {
+    padding: 0.7rem 1.8rem;
+    font-size: 1rem;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 0.6rem 1.5rem;
+    font-size: 0.9rem;
+  }
+  
   &:hover {
     background: #fff;
     color: #e6b17a;
