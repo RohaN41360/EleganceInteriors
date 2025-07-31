@@ -9,7 +9,7 @@ const Button = styled(motion.button)`
   position: fixed;
   bottom: 100px;
   right: 24px;
-  background: linear-gradient(135deg, #e6b17a 0%, #7f5af0 100%);
+  background: linear-gradient(135deg, var(--cta-color, #e6b17a) 0%, var(--accent-primary, #7f5af0) 100%);
   color: #fff;
   border: none;
   padding: 1rem 1.5rem;
@@ -208,12 +208,12 @@ const Input = styled.input`
   box-sizing: border-box;
   padding: 1.1rem 1.2rem 1.1rem 2.7rem;
   border-radius: 12px;
-  border: 1.5px solid #1a3c2e;
+  border: 1.5px solid var(--text-primary, #1a3c2e);
   font-size: 1.08rem;
-  background: #fff;
-  color: #232946;
-  box-shadow: 0 1.5px 8px #7f5af011;
-  transition: border 0.18s, box-shadow 0.18s;
+  background: var(--bg-primary, #fff);
+  color: var(--text-primary, #232946);
+  box-shadow: 0 1.5px 8px var(--shadow-color, #7f5af011);
+  transition: border 0.18s, box-shadow 0.18s, background 0.18s, color 0.18s;
   margin-bottom: 0.2rem;
   appearance: none;
   line-height: 1.2;
@@ -232,11 +232,12 @@ const Input = styled.input`
     border: 1.5px solid #7f5af0;
     outline: none;
     box-shadow: 0 2px 12px #7f5af044;
-    background: #f7f5f2;
+    background: var(--bg-secondary, #f7f5f2);
+    color: var(--text-primary, #232946);
   }
   
   &::placeholder {
-    color: #999;
+    color: var(--text-secondary, #999);
   }
 `;
 
@@ -245,12 +246,12 @@ const TextArea = styled.textarea`
   box-sizing: border-box;
   padding: 1.1rem 1.2rem 1.1rem 2.7rem;
   border-radius: 12px;
-  border: 1.5px solid #1a3c2e;
+  border: 1.5px solid var(--text-primary, #1a3c2e);
   font-size: 1.08rem;
-  background: #fff;
-  color: #232946;
-  box-shadow: 0 1.5px 8px #7f5af011;
-  transition: border 0.18s, box-shadow 0.18s;
+  background: var(--bg-primary, #fff);
+  color: var(--text-primary, #232946);
+  box-shadow: 0 1.5px 8px var(--shadow-color, #7f5af011);
+  transition: border 0.18s, box-shadow 0.18s, background 0.18s, color 0.18s;
   margin-bottom: 0.2rem;
   min-height: 110px;
   resize: vertical;
@@ -272,11 +273,12 @@ const TextArea = styled.textarea`
     border: 1.5px solid #7f5af0;
     outline: none;
     box-shadow: 0 2px 12px #7f5af044;
-    background: #f7f5f2;
+    background: var(--bg-secondary, #f7f5f2);
+    color: var(--text-primary, #232946);
   }
   
   &::placeholder {
-    color: #999;
+    color: var(--text-secondary, #999);
   }
 `;
 
@@ -285,9 +287,10 @@ const IconWrapper = styled.div`
   top: 50%;
   left: 1rem;
   transform: translateY(-50%);
-  color: #1a3c2e;
+  color: var(--text-primary, #1a3c2e);
   font-size: 1.15rem;
   z-index: 3;
+  transition: color 0.3s ease;
   
   @media (max-width: 768px) {
     font-size: 1.1rem;

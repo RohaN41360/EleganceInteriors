@@ -8,7 +8,8 @@ import { collection, getDocs, query, where } from 'firebase/firestore';
 
 const Section = styled.section`
   padding: 5rem 1rem 2rem 1rem;
-  background: linear-gradient(135deg, #f7f5f2 0%, #ffffff 100%);
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+  transition: all 0.3s ease;
   
   @media (max-width: 768px) {
     padding: 3rem 0.8rem 1.5rem 0.8rem;
@@ -22,9 +23,10 @@ const Section = styled.section`
 const Title = styled.h2`
   text-align: center;
   font-size: 2.2rem;
-  color: #1a3c2e;
+  color: var(--text-primary);
   margin-bottom: 1rem;
   font-weight: 700;
+  transition: color 0.3s ease;
   
   @media (max-width: 768px) {
     font-size: 1.8rem;
@@ -38,11 +40,12 @@ const Title = styled.h2`
 const Subtitle = styled.p`
   text-align: center;
   font-size: 1.1rem;
-  color: #666;
+  color: var(--text-secondary);
   margin-bottom: 3rem;
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
+  transition: color 0.3s ease;
   
   @media (max-width: 768px) {
     font-size: 1rem;
@@ -59,13 +62,13 @@ const ReviewCard = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: #ffffff;
+  background: var(--bg-primary);
   border-radius: 20px;
   padding: 2.5rem 2rem;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+  box-shadow: 0 8px 32px var(--shadow-color);
   max-width: 450px;
   margin: 0 auto;
-  border: 1px solid rgba(230, 177, 122, 0.1);
+  border: 1px solid var(--border-color);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   position: relative;
   overflow: hidden;
@@ -128,9 +131,10 @@ const Avatar = styled.div`
 
 const Name = styled.h3`
   font-size: 1.2rem;
-  color: #1a3c2e;
+  color: var(--text-primary);
   margin-bottom: 0.3rem;
   font-weight: 700;
+  transition: color 0.3s ease;
   
   @media (max-width: 768px) {
     font-size: 1.1rem;
@@ -143,9 +147,10 @@ const Name = styled.h3`
 
 const Location = styled.p`
   font-size: 0.9rem;
-  color: #666;
+  color: var(--text-secondary);
   margin-bottom: 1rem;
   font-weight: 500;
+  transition: color 0.3s ease;
   
   @media (max-width: 480px) {
     font-size: 0.8rem;
@@ -154,11 +159,12 @@ const Location = styled.p`
 
 const Text = styled.p`
   font-size: 1rem;
-  color: #333;
+  color: var(--text-primary);
   margin-bottom: 1.5rem;
   line-height: 1.6;
   text-align: center;
   font-style: italic;
+  transition: color 0.3s ease;
   
   @media (max-width: 768px) {
     font-size: 0.95rem;
@@ -191,6 +197,19 @@ const Stars = styled.div`
 `;
 
 const CarouselContainer = styled.div`
+  position: relative;
+  padding: 0 4rem;
+  margin: 0 auto;
+  max-width: 800px;
+  
+  @media (max-width: 768px) {
+    padding: 0 3rem;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 0 2.5rem;
+  }
+  
   .carousel .slide {
     padding: 0 1rem;
     
@@ -217,30 +236,61 @@ const CarouselContainer = styled.div`
   }
   
   .carousel .control-arrow {
-    background: rgba(230, 177, 122, 0.1);
+    background: rgba(230, 177, 122, 0.9);
     border-radius: 50%;
-    width: 40px;
-    height: 40px;
+    width: 60px;
+    height: 60px;
     display: flex;
     align-items: center;
     justify-content: center;
+    border: 3px solid rgba(230, 177, 122, 0.4);
+    transition: all 0.3s ease;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
     
     @media (max-width: 768px) {
-      width: 35px;
-      height: 35px;
+      width: 55px;
+      height: 55px;
     }
     
     @media (max-width: 480px) {
-      width: 30px;
-      height: 30px;
+      width: 50px;
+      height: 50px;
     }
     
     &:hover {
-      background: rgba(230, 177, 122, 0.2);
+      background: rgba(230, 177, 122, 1);
+      transform: translateY(-50%) scale(1.1);
+      box-shadow: 0 4px 12px rgba(230, 177, 122, 0.3);
     }
     
     &::before {
-      border-color: #e6b17a;
+      border-color: #fff;
+      border-width: 3px;
+      width: 12px;
+      height: 12px;
+    }
+    
+    &.control-prev {
+      left: -30px;
+      
+      &::before {
+        border-right: 3px solid #fff;
+        border-bottom: 3px solid #fff;
+        transform: rotate(135deg);
+      }
+    }
+    
+    &.control-next {
+      right: -30px;
+      
+      &::before {
+        border-left: 3px solid #fff;
+        border-bottom: 3px solid #fff;
+        transform: rotate(-45deg);
+      }
     }
   }
 `;
@@ -339,6 +389,8 @@ const Reviews = () => {
             stopOnHover={true}
             swipeable={true}
             emulateTouch={true}
+            useKeyboardArrows={true}
+            dynamicHeight={false}
           >
             {reviews.map((review, idx) => (
               <ReviewCard key={review.id}>

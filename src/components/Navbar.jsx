@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
-import { FaWhatsapp, FaHammer, FaHome, FaStar, FaEnvelope, FaBars, FaTimes } from 'react-icons/fa';
+import { FaHammer, FaHome, FaStar, FaEnvelope, FaBars, FaTimes, FaSun, FaMoon, FaBuilding } from 'react-icons/fa';
 import { Link } from 'react-scroll';
+import { useTheme } from '../context/ThemeContext';
 
 const Nav = styled.nav`
   width: 100%;
-  background: #fff;
-  box-shadow: 0 4px 24px rgba(26,60,46,0.08);
+  background: var(--bg-primary);
+  box-shadow: 0 4px 24px var(--shadow-color);
   position: sticky;
   top: 0;
   left: 0;
   z-index: 2000;
-  transition: box-shadow 0.2s;
+  transition: all 0.3s ease;
 `;
 const NavContainer = styled.div`
   max-width: 1200px;
@@ -32,12 +33,13 @@ const NavContainer = styled.div`
 const Logo = styled.div`
   font-size: 2rem;
   font-weight: 800;
-  color: #1a3c2e;
+  color: var(--text-primary);
   display: flex;
   align-items: center;
   gap: 0.7rem;
   font-family: 'Montserrat', Arial, Helvetica, sans-serif;
   letter-spacing: 1px;
+  transition: color 0.3s ease;
 `;
 const LogoImg = styled.img`
   height: 48px;
@@ -76,6 +78,7 @@ const LogoText = styled.div`
   margin-left: 0.1rem;
   font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
   opacity: 0.92;
+  transition: color 0.3s ease;
   
   @media (max-width: 768px) {
     font-size: 0.98rem;
@@ -110,27 +113,70 @@ const NavLinks = styled.div`
   }
 `;
 const NavLink = styled(Link)`
-  color: #1a3c2e;
+  color: var(--text-primary);
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   text-decoration: none;
   padding: 0.5rem 1.1rem;
   border-radius: 18px;
-  transition: background 0.18s, color 0.18s;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   white-space: nowrap;
   display: flex;
   align-items: center;
   gap: 0.4rem;
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(230, 177, 122, 0.2), transparent);
+    transition: left 0.5s ease;
+  }
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #e6b17a, #7f5af0);
+    transition: width 0.3s ease;
+  }
   
   @media (max-width: 900px) {
     padding: 0.4rem 0.8rem;
     font-size: 0.95rem;
   }
   
-  &:hover, &.active {
-    background: #e6b17a22;
+  &:hover {
     color: #e6b17a;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(230, 177, 122, 0.2);
+    
+    &::before {
+      left: 100%;
+    }
+    
+    &::after {
+      width: 100%;
+    }
+  }
+  
+  &.active {
+    background: linear-gradient(135deg, rgba(230, 177, 122, 0.15), rgba(127, 90, 240, 0.1));
+    color: #e6b17a;
+    box-shadow: 0 2px 8px rgba(230, 177, 122, 0.2);
+    
+    &::after {
+      width: 100%;
+    }
   }
 `;
 const WhatsAppBtn = styled.a`
@@ -143,8 +189,37 @@ const WhatsAppBtn = styled.a`
   justify-content: center;
   font-size: 1.3rem;
   margin-left: 1rem;
-  transition: background 0.2s;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   box-shadow: 0 2px 8px rgba(37,211,102,0.10);
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 0.4s ease;
+  }
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #25d366, #128c7e, #25d366);
+    border-radius: 50%;
+    opacity: 0;
+    transition: all 0.4s ease;
+    z-index: -1;
+  }
   
   @media (max-width: 700px) {
     display: none;
@@ -152,15 +227,27 @@ const WhatsAppBtn = styled.a`
   
   &:hover {
     background: #128c7e;
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 6px 20px rgba(37,211,102,0.3);
+    
+    &::before {
+      width: 100%;
+      height: 100%;
+    }
+    
+    &::after {
+      opacity: 1;
+    }
   }
 `;
 const Hamburger = styled.button`
   display: none;
   background: none;
   border: none;
-  color: #1a3c2e;
+  color: var(--text-primary, #1a3c2e);
   font-size: 2rem;
   cursor: pointer;
+  transition: color 0.3s ease;
   
   @media (max-width: 700px) {
     display: block;
@@ -196,12 +283,12 @@ const Drawer = styled.div`
     width: 70vw;
     max-width: 320px;
     height: 100vh;
-    background: #fff;
-    box-shadow: -2px 0 16px rgba(26,60,46,0.10);
+    background: var(--bg-primary, #fff);
+    box-shadow: -2px 0 16px var(--shadow-color, rgba(26,60,46,0.10));
     z-index: 2200;
     padding: 2.5rem 1.5rem 1.5rem 1.5rem;
     transform: ${({ open }) => (open ? 'translateX(0)' : 'translateX(100%)')};
-    transition: transform 0.25s cubic-bezier(.4,0,.2,1);
+    transition: transform 0.25s cubic-bezier(.4,0,.2,1), background 0.3s ease;
     
     @media (max-width: 480px) {
       width: 80vw;
@@ -212,11 +299,12 @@ const Drawer = styled.div`
 const DrawerClose = styled.button`
   background: none;
   border: none;
-  color: #1a3c2e;
+  color: var(--text-primary, #1a3c2e);
   font-size: 2rem;
   align-self: flex-end;
   margin-bottom: 2rem;
   cursor: pointer;
+  transition: color 0.3s ease;
   
   @media (max-width: 480px) {
     font-size: 1.8rem;
@@ -232,45 +320,77 @@ const DrawerLinks = styled.div`
     gap: 1.2rem;
   }
 `;
-const DrawerWhatsAppBtn = styled.a`
-  background: #25d366;
-  color: #fff;
-  border-radius: 50%;
-  width: 56px;
-  height: 56px;
+
+
+const DrawerThemeToggle = styled.div`
   display: flex;
-  align-items: center;
   justify-content: center;
-  font-size: 2rem;
-  margin: 1.5rem auto 0 auto;
-  box-shadow: 0 2px 8px rgba(37,211,102,0.10);
-  transition: background 0.2s;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color, #e6e6e6);
+`;
+
+const DrawerToggleSwitch = styled.div`
+  position: relative;
+  width: 50px;
+  height: 25px;
+  background: ${props => props.isDark ? '#2C3432' : '#e2e8f0'};
+  border-radius: 12.5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border: 2px solid ${props => props.isDark ? '#3C4744' : '#cbd5e0'};
   
-  @media (max-width: 480px) {
-    width: 50px;
-    height: 50px;
-    font-size: 1.8rem;
-    margin: 1.2rem auto 0 auto;
+  &::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: ${props => props.isDark ? '23px' : '2px'};
+    width: 21px;
+    height: 21px;
+    background: ${props => props.isDark ? '#F0F4ED' : '#fff'};
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   }
   
   &:hover {
-    background: #128c7e;
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
   }
 `;
-const DrawerWhatsAppLabel = styled.div`
+
+const DrawerIconContainer = styled.div`
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 4px;
+  pointer-events: none;
+`;
+
+const DrawerIcon = styled.div`
+  font-size: 0.6rem;
+  color: ${props => props.isDark ? '#F0F4ED' : '#4a5568'};
+  opacity: ${props => props.active ? 1 : 0.5};
+  transition: all 0.3s ease;
+`;
+
+const DrawerToggleLabel = styled.div`
   text-align: center;
-  color: #25d366;
-  font-size: 1rem;
+  color: var(--text-primary);
+  font-size: 0.9rem;
   font-weight: 600;
-  margin-top: 0.3rem;
-  
-  @media (max-width: 480px) {
-    font-size: 0.9rem;
-  }
+  margin-top: 0.5rem;
+  transition: color 0.3s ease;
 `;
 
 const Navbar = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const { isDark, toggleTheme } = useTheme();
 
   const handleDrawer = () => setDrawerOpen((v) => !v);
   const closeDrawer = () => setDrawerOpen(false);
@@ -286,6 +406,7 @@ const Navbar = () => {
           <NavLink to="home" smooth={true} duration={500} spy={true} offset={-80} activeClass="active"><FaHome /> Home</NavLink>
           <NavLink to="services" smooth={true} duration={500} spy={true} offset={-80} activeClass="active"><FaHammer /> Services</NavLink>
           <NavLink to="our-projects" smooth={true} duration={500} spy={true} offset={-80} activeClass="active"><FaStar /> Our Projects</NavLink>
+          <NavLink to="commercial-projects" smooth={true} duration={500} spy={true} offset={-80} activeClass="active"><FaBuilding /> Commercial</NavLink>
           <NavLink to="reviews" smooth={true} duration={500} spy={true} offset={-80} activeClass="active"><FaStar /> Reviews</NavLink>
           <NavLink to="contact" smooth={true} duration={500} spy={true} offset={-80} activeClass="active"><FaEnvelope /> Contact</NavLink>
         </NavLinks>
@@ -302,13 +423,28 @@ const Navbar = () => {
           <NavLink to="home" smooth={true} duration={500} spy={true} offset={-80} activeClass="active" onClick={closeDrawer}><FaHome /> Home</NavLink>
           <NavLink to="services" smooth={true} duration={500} spy={true} offset={-80} activeClass="active" onClick={closeDrawer}><FaHammer /> Services</NavLink>
           <NavLink to="our-projects" smooth={true} duration={500} spy={true} offset={-80} activeClass="active" onClick={closeDrawer}><FaStar /> Our Projects</NavLink>
+          <NavLink to="commercial-projects" smooth={true} duration={500} spy={true} offset={-80} activeClass="active" onClick={closeDrawer}><FaBuilding /> Commercial</NavLink>
           <NavLink to="reviews" smooth={true} duration={500} spy={true} offset={-80} activeClass="active" onClick={closeDrawer}><FaStar /> Reviews</NavLink>
           <NavLink to="contact" smooth={true} duration={500} spy={true} offset={-80} activeClass="active" onClick={closeDrawer}><FaEnvelope /> Contact</NavLink>
-          <DrawerWhatsAppBtn href="https://wa.me/917499052825" target="_blank" rel="noopener noreferrer" title="Chat on WhatsApp">
-            <FaWhatsapp />
-          </DrawerWhatsAppBtn>
-          <DrawerWhatsAppLabel>WhatsApp</DrawerWhatsAppLabel>
         </DrawerLinks>
+        <DrawerThemeToggle>
+          <div style={{ textAlign: 'center' }}>
+            <DrawerToggleSwitch
+              isDark={isDark}
+              onClick={toggleTheme}
+            >
+              <DrawerIconContainer>
+                <DrawerIcon isDark={isDark} active={!isDark}>
+                  <FaSun />
+                </DrawerIcon>
+                <DrawerIcon isDark={isDark} active={isDark}>
+                  <FaMoon />
+                </DrawerIcon>
+              </DrawerIconContainer>
+            </DrawerToggleSwitch>
+            <DrawerToggleLabel>Theme</DrawerToggleLabel>
+          </div>
+        </DrawerThemeToggle>
       </Drawer>
     </Nav>
   );

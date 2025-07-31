@@ -7,8 +7,9 @@ import { FaPhoneAlt, FaEnvelope, FaInstagram, FaUser, FaPhone, FaCommentDots } f
 
 const Section = styled.section`
   padding: 5rem 1rem 2rem 1rem;
-  background: linear-gradient(120deg, #f7f5f2 60%, #e6b17a22 100%);
-  color: #1a3c2e;
+  background: var(--bg-section);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
   
   @media (max-width: 768px) {
     padding: 3rem 0.8rem 1.5rem 0.8rem;
@@ -21,12 +22,13 @@ const Section = styled.section`
 const Container = styled(motion.div)`
   max-width: 900px;
   margin: 0 auto;
-  background: #fff;
+  background: var(--bg-primary);
   border-radius: 18px;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+  box-shadow: 0 4px 24px var(--shadow-color);
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  transition: all 0.3s ease;
   
   @media (min-width: 800px) {
     flex-direction: row;
@@ -111,26 +113,29 @@ const InstaLink = styled.a`
   }
 `;
 const FormWrap = styled.div`
-  flex: 2;
-  padding: 2.5rem 2rem;
-  background: linear-gradient(120deg, #f7f5f2 60%, #e6b17a11 100%);
-  border-radius: 18px;
+  background: var(--bg-card);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px var(--shadow-color, rgba(0,0,0,0.1));
+  padding: 2.5rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border-color, rgba(230, 177, 122, 0.1));
   
   @media (max-width: 768px) {
-    padding: 2rem 1.5rem;
+    padding: 2rem;
   }
   
   @media (max-width: 480px) {
-    padding: 1.5rem 1.2rem;
+    padding: 1.5rem;
   }
 `;
 const Title = styled.h2`
   text-align: left;
   font-size: 2.2rem;
-  color: #1a3c2e;
+  color: var(--text-primary);
   margin-bottom: 2.5rem;
   font-weight: 900;
   letter-spacing: 0.5px;
+  transition: color 0.3s ease;
   
   @media (max-width: 768px) {
     font-size: 1.8rem;
@@ -144,10 +149,11 @@ const Title = styled.h2`
 `;
 const Intro = styled.p`
   font-size: 1.18rem;
-  color: #1a3c2e;
+  color: var(--text-primary);
   margin-bottom: 1.7rem;
   text-align: left;
   font-weight: 500;
+  transition: color 0.3s ease;
   
   @media (max-width: 768px) {
     font-size: 1.05rem;
@@ -180,7 +186,7 @@ const Label = styled.label`
   position: absolute;
   top: 1.1rem;
   left: 2.7rem;
-  color: #1a3c2e;
+  color: var(--text-primary);
   font-size: 1.08rem;
   font-weight: 700;
   letter-spacing: 0.01em;
@@ -246,15 +252,29 @@ const StyledInput = styled.input`
   box-sizing: border-box;
   padding: 1.1rem 1.2rem 1.1rem 2.7rem;
   border-radius: 12px;
-  border: 1.5px solid #1a3c2e;
+  border: 1.5px solid var(--text-primary);
   font-size: 1.08rem;
-  background: #fff;
-  color: #232946;
-  box-shadow: 0 1.5px 8px #7f5af011;
-  transition: border 0.18s, box-shadow 0.18s;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  box-shadow: 0 1.5px 8px var(--shadow-color);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   margin-bottom: 0.2rem;
   appearance: none;
   line-height: 1.2;
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(230, 177, 122, 0.1), rgba(127, 90, 240, 0.1));
+    border-radius: 12px;
+    opacity: 0;
+    transition: all 0.3s ease;
+  }
   
   @media (max-width: 768px) {
     padding: 1rem 1.1rem 1rem 2.5rem;
@@ -266,11 +286,19 @@ const StyledInput = styled.input`
     font-size: 0.95rem;
   }
   
+  &:hover {
+    border: 1.5px solid #e6b17a;
+    box-shadow: 0 4px 16px rgba(230, 177, 122, 0.2);
+    transform: translateY(-2px);
+  }
+  
   &:focus {
     border: 1.5px solid #7f5af0;
     outline: none;
-    box-shadow: 0 2px 12px #7f5af044;
-    background: #f7f5f2;
+    box-shadow: 0 6px 20px rgba(127, 90, 240, 0.3);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    transform: translateY(-2px);
   }
 `;
 const StyledTextArea = styled.textarea`
@@ -278,15 +306,16 @@ const StyledTextArea = styled.textarea`
   box-sizing: border-box;
   padding: 1.1rem 1.2rem 1.1rem 2.7rem;
   border-radius: 12px;
-  border: 1.5px solid #1a3c2e;
+  border: 1.5px solid var(--text-primary);
   font-size: 1.08rem;
-  background: #fff;
-  color: #232946;
-  box-shadow: 0 1.5px 8px #7f5af011;
-  transition: border 0.18s, box-shadow 0.18s;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  box-shadow: 0 1.5px 8px var(--shadow-color);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   margin-bottom: 0.2rem;
   min-height: 110px;
   resize: vertical;
+  position: relative;
   
   @media (max-width: 768px) {
     padding: 1rem 1.1rem 1rem 2.5rem;
@@ -300,15 +329,23 @@ const StyledTextArea = styled.textarea`
     min-height: 90px;
   }
   
+  &:hover {
+    border: 1.5px solid #e6b17a;
+    box-shadow: 0 4px 16px rgba(230, 177, 122, 0.2);
+    transform: translateY(-2px);
+  }
+  
   &:focus {
     border: 1.5px solid #7f5af0;
     outline: none;
-    box-shadow: 0 2px 12px #7f5af044;
-    background: #f7f5f2;
+    box-shadow: 0 6px 20px rgba(127, 90, 240, 0.3);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    transform: translateY(-2px);
   }
 `;
 const Button = styled(motion.button)`
-  background: #1a3c2e;
+  background: linear-gradient(135deg, var(--cta-color, #1a3c2e) 0%, var(--accent-primary, #2d5a4a) 100%);
   color: #fff;
   padding: 0.8rem 2.2rem;
   border-radius: 30px;
@@ -316,8 +353,35 @@ const Button = styled(motion.button)`
   font-weight: 600;
   border: none;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-  transition: background 0.2s, color 0.2s, border 0.2s;
+  box-shadow: 0 4px 16px rgba(26, 60, 46, 0.2);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+  }
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(135deg, #e6b17a, #7f5af0, #e6b17a);
+    border-radius: 32px;
+    opacity: 0;
+    transition: all 0.4s ease;
+    z-index: -1;
+  }
   
   @media (max-width: 768px) {
     padding: 0.7rem 1.8rem;
@@ -330,9 +394,18 @@ const Button = styled(motion.button)`
   }
   
   &:hover, &:focus {
-    background: #fff;
-    color: #1a3c2e;
-    border: 1.5px solid #1a3c2e;
+    background: linear-gradient(135deg, #e6b17a 0%, #7f5af0 100%);
+    color: #fff;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(230, 177, 122, 0.3);
+    
+    &::before {
+      left: 100%;
+    }
+    
+    &::after {
+      opacity: 1;
+    }
   }
 `;
 const SuccessMsg = styled.p`

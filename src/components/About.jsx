@@ -10,7 +10,8 @@ const AboutSection = styled.section`
   justify-content: center;
   gap: 2.5rem;
   padding: 5rem 1rem 2rem 1rem;
-  background: #fff;
+  background: var(--bg-primary);
+  transition: all 0.3s ease;
   
   @media (max-width: 900px) {
     flex-direction: column;
@@ -57,7 +58,7 @@ const IconRow = styled.div`
   }
 `;
 const IconCircle = styled(motion.div)`
-  background: linear-gradient(120deg, #fffbe6 60%, #e6b17a22 100%);
+  background: linear-gradient(120deg, var(--bg-secondary) 60%, rgba(230, 177, 122, 0.1) 100%);
   border-radius: 50%;
   box-shadow: 0 2px 12px 0 rgba(230,177,122,0.13);
   padding: 0.7rem;
@@ -76,13 +77,14 @@ const IconCircle = styled(motion.div)`
   
   &:hover {
     box-shadow: 0 4px 18px 0 rgba(26,60,46,0.18);
-    background: linear-gradient(120deg, #e6b17a33 60%, #fffbe6 100%);
+    background: linear-gradient(120deg, rgba(230, 177, 122, 0.2) 60%, var(--bg-secondary) 100%);
   }
 `;
 const AboutTitle = styled.h2`
   font-size: 2.2rem;
-  color: #1a3c2e;
+  color: var(--text-primary);
   margin-bottom: 1.2rem;
+  transition: color 0.3s ease;
   
   @media (max-width: 768px) {
     font-size: 1.8rem;
@@ -96,8 +98,9 @@ const AboutTitle = styled.h2`
 `;
 const AboutDesc = styled.p`
   font-size: 1.15rem;
-  color: #333;
+  color: var(--text-secondary);
   margin-bottom: 1.5rem;
+  transition: color 0.3s ease;
   line-height: 1.7;
   
   @media (max-width: 768px) {
@@ -111,14 +114,15 @@ const AboutDesc = styled.p`
   }
 `;
 const Mission = styled.div`
-  background: #e6b17a22;
-  border-left: 5px solid #e6b17a;
+  background: rgba(230, 177, 122, 0.1);
+  border-left: 5px solid var(--accent-primary, #e6b17a);
   padding: 1.1rem 1.5rem;
   border-radius: 12px;
   font-size: 1.08rem;
-  color: #1a3c2e;
+  color: var(--text-primary);
   font-weight: 600;
   margin-bottom: 1.2rem;
+  transition: all 0.3s ease;
   
   @media (max-width: 768px) {
     padding: 1rem 1.2rem;
@@ -170,7 +174,7 @@ const VideoWrap = styled(motion.div)`
   background: #222;
   position: relative;
   cursor: pointer;
-  border: 4px solid #e6b17a;
+  border: 4px solid var(--accent-primary, #e6b17a);
   transition: box-shadow 0.2s, border 0.2s, transform 0.2s;
   margin: 2.5rem auto 0 auto;
   

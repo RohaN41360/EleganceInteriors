@@ -4,10 +4,12 @@ import { motion } from 'framer-motion';
 import { FiPlay, FiPause, FiImage, FiVideo } from 'react-icons/fi';
 import { db } from '../firebase';
 import { collection, getDocs, query, orderBy } from 'firebase/firestore';
+import LazyImage from './LazyImage';
 
 const Section = styled.section`
   padding: 5rem 1rem 2rem 1rem;
-  background: #fff;
+  background: var(--bg-primary);
+  transition: all 0.3s ease;
   
   @media (max-width: 900px) {
     padding: 3rem 0.8rem 1.5rem 0.8rem;
@@ -29,9 +31,10 @@ const Section = styled.section`
 const Title = styled.h2`
   text-align: center;
   font-size: 2.2rem;
-  color: #1a3c2e;
+  color: var(--text-primary);
   margin-bottom: 3rem;
   font-weight: 700;
+  transition: color 0.3s ease;
   
   @media (max-width: 768px) {
     font-size: 1.8rem;
@@ -47,10 +50,11 @@ const Title = styled.h2`
 const SectionTitle = styled.h3`
   text-align: center;
   font-size: 1.8rem;
-  color: #1a3c2e;
+  color: var(--text-primary);
   margin: 4rem 0 2rem 0;
   font-weight: 600;
   position: relative;
+  transition: color 0.3s ease;
   
   &::after {
     content: '';
@@ -94,10 +98,10 @@ const Grid = styled.div`
 `;
 
 const Card = styled(motion.div)`
-  background: #fff;
+  background: var(--bg-primary);
   border-radius: 15px;
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 20px var(--shadow-color);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
   
@@ -309,8 +313,8 @@ const NavigationButton = styled.button`
   transition: all 0.3s ease;
   z-index: 10000;
   font-weight: bold;
-  opacity: ${props => props.visible ? 1 : 0};
-  pointer-events: ${props => props.visible ? 'auto' : 'none'};
+  opacity: ${props => props.visible ? 1 : 0.8};
+  pointer-events: auto;
   
   @media (max-width: 768px) {
     width: 60px;
@@ -328,6 +332,7 @@ const NavigationButton = styled.button`
     background: rgba(255, 255, 255, 0.25);
     border-color: rgba(255, 255, 255, 0.5);
     transform: translateY(-50%) scale(1.1);
+    opacity: 1;
   }
   
   &.prev {
@@ -472,11 +477,9 @@ const OurProjects = () => {
     setCurrentMediaIndex((prev) => (prev + 1) % currentMedia.length);
     setShowNavigation(true);
     
-    // Auto-hide navigation for videos after 1 second
+    // Keep navigation visible for videos
     if (currentMediaType === 'video') {
-      setTimeout(() => {
-        setShowNavigation(false);
-      }, 1000);
+      setShowNavigation(true);
     }
   };
 
@@ -485,11 +488,9 @@ const OurProjects = () => {
     setCurrentMediaIndex((prev) => (prev - 1 + currentMedia.length) % currentMedia.length);
     setShowNavigation(true);
     
-    // Auto-hide navigation for videos after 1 second
+    // Keep navigation visible for videos
     if (currentMediaType === 'video') {
-      setTimeout(() => {
-        setShowNavigation(false);
-      }, 1000);
+      setShowNavigation(true);
     }
   };
 
@@ -516,9 +517,6 @@ const OurProjects = () => {
   const handleMouseMove = () => {
     if (currentMediaType === 'video') {
       setShowNavigation(true);
-      setTimeout(() => {
-        setShowNavigation(false);
-      }, 1000);
     }
   };
 
@@ -532,7 +530,7 @@ const OurProjects = () => {
   const currentMedia = currentMediaType === 'image' ? images[currentMediaIndex] : videos[currentMediaIndex];
 
   return (
-    <Section id="projects">
+    <Section id="our-projects">
       <Title>Our Projects</Title>
       
       {/* Photo Tour Section */}
@@ -563,7 +561,7 @@ const OurProjects = () => {
                 viewport={{ once: true }}
               >
                 <CardImg>
-                  <MediaItem src={item.url} alt={item.name || 'Project Image'} />
+                  <LazyImage src={item.url} alt={item.name || 'Project Image'} />
                 </CardImg>
               </Card>
             ))}
@@ -604,7 +602,7 @@ const OurProjects = () => {
               >
                 <CardImg>
                   <VideoItem 
-                    src={item.url} 
+              src={item.url}
                     muted 
                     onMouseEnter={(e) => {
                       e.target.play();

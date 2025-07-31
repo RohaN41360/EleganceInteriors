@@ -218,12 +218,12 @@ const Input = styled.input`
   box-sizing: border-box;
   padding: 1.3rem 1.2rem 0.7rem 1.2rem;
   border-radius: 12px;
-  border: 1.8px solid #b2becd;
+  border: 1.8px solid var(--border-color, #b2becd);
   font-size: 1.15rem;
-  background: #f7f7fa;
-  color: #232946;
-  box-shadow: 0 1.5px 8px #7f5af011;
-  transition: border 0.18s, box-shadow 0.18s;
+  background: var(--bg-primary, #f7f7fa);
+  color: var(--text-primary, #232946);
+  box-shadow: 0 1.5px 8px var(--shadow-color, #7f5af011);
+  transition: border 0.18s, box-shadow 0.18s, background 0.18s, color 0.18s;
   margin-bottom: 0.2rem;
   appearance: none;
   line-height: 1.2;
@@ -231,6 +231,8 @@ const Input = styled.input`
     border: 1.8px solid #7f5af0;
     outline: none;
     box-shadow: 0 2px 12px #7f5af044;
+    background: var(--bg-secondary, #f0f0f0);
+    color: var(--text-primary, #232946);
   }
 `;
 const Select = styled.select`
@@ -238,12 +240,12 @@ const Select = styled.select`
   box-sizing: border-box;
   padding: 1.3rem 1.2rem 0.7rem 1.2rem;
   border-radius: 12px;
-  border: 1.8px solid #b2becd;
+  border: 1.8px solid var(--border-color, #b2becd);
   font-size: 1.15rem;
-  background: #f7f7fa;
-  color: #232946;
-  box-shadow: 0 1.5px 8px #7f5af011;
-  transition: border 0.18s, box-shadow 0.18s;
+  background: var(--bg-primary, #f7f7fa);
+  color: var(--text-primary, #232946);
+  box-shadow: 0 1.5px 8px var(--shadow-color, #7f5af011);
+  transition: border 0.18s, box-shadow 0.18s, background 0.18s, color 0.18s;
   margin-bottom: 0.2rem;
   appearance: none;
   line-height: 1.2;
@@ -251,6 +253,8 @@ const Select = styled.select`
     border: 1.8px solid #00e6e6;
     outline: none;
     box-shadow: 0 2px 12px #00e6e644;
+    background: var(--bg-secondary, #f0f0f0);
+    color: var(--text-primary, #232946);
   }
 `;
 const Button = styled.button`
@@ -629,12 +633,12 @@ const ModalInput = styled.input`
   box-sizing: border-box;
   padding: 1.3rem 1.2rem 0.7rem 1.2rem;
   border-radius: 12px;
-  border: 1.8px solid #b2becd;
+  border: 1.8px solid var(--border-color, #b2becd);
   font-size: 1.15rem;
-  background: #f7f7fa;
-  color: #232946;
-  box-shadow: 0 1.5px 8px #7f5af011;
-  transition: border 0.18s, box-shadow 0.18s;
+  background: var(--bg-primary, #f7f7fa);
+  color: var(--text-primary, #232946);
+  box-shadow: 0 1.5px 8px var(--shadow-color, #7f5af011);
+  transition: border 0.18s, box-shadow 0.18s, background 0.18s, color 0.18s;
   margin-bottom: 0.2rem;
   appearance: none;
   line-height: 1.2;
@@ -642,6 +646,8 @@ const ModalInput = styled.input`
     border: 1.8px solid #7f5af0;
     outline: none;
     box-shadow: 0 2px 12px #7f5af044;
+    background: var(--bg-secondary, #f0f0f0);
+    color: var(--text-primary, #232946);
   }
 `;
 const ModalSelect = styled.select`
@@ -649,12 +655,12 @@ const ModalSelect = styled.select`
   box-sizing: border-box;
   padding: 1.3rem 1.2rem 0.7rem 1.2rem;
   border-radius: 12px;
-  border: 1.8px solid #b2becd;
+  border: 1.8px solid var(--border-color, #b2becd);
   font-size: 1.15rem;
-  background: #f7f7fa;
-  color: #232946;
-  box-shadow: 0 1.5px 8px #7f5af011;
-  transition: border 0.18s, box-shadow 0.18s;
+  background: var(--bg-primary, #f7f7fa);
+  color: var(--text-primary, #232946);
+  box-shadow: 0 1.5px 8px var(--shadow-color, #7f5af011);
+  transition: border 0.18s, box-shadow 0.18s, background 0.18s, color 0.18s;
   margin-bottom: 0.2rem;
   appearance: none;
   line-height: 1.2;
@@ -662,6 +668,8 @@ const ModalSelect = styled.select`
     border: 1.8px solid #00e6e6;
     outline: none;
     box-shadow: 0 2px 12px #00e6e644;
+    background: var(--bg-secondary, #f0f0f0);
+    color: var(--text-primary, #232946);
   }
 `;
 const ModalActions = styled.div`
