@@ -221,7 +221,7 @@ const socialData = [
     contact: "+91 98765 43210",
     bgColor: "#e6b17a",
     hoverBgColor: "#d4a06a",
-    href: "tel:+919876543210"
+    href: "tel:+91 88064 14374"
   },
   {
     id: 3,
