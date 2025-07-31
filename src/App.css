@@ -39,7 +39,7 @@ section {
     padding: 0;
   }
   section {
-    padding: 2.5rem 0.5rem 1.5rem 0.5rem !important;
+    padding: 2.5rem 1rem 1.5rem 1rem !important;
   }
 }
 
@@ -51,7 +51,7 @@ section {
     font-size: 1.3rem;
   }
   section {
-    padding: 2rem 0.3rem 1rem 0.3rem !important;
+    padding: 2rem 0.8rem 1rem 0.8rem !important;
   }
   .card, .logo, .read-the-docs {
     font-size: 1rem;
@@ -63,10 +63,16 @@ section {
     font-size: 1.1rem;
   }
   section {
-    padding: 1.2rem 0.1rem 0.7rem 0.1rem !important;
+    padding: 1.5rem 0.6rem 0.8rem 0.6rem !important;
   }
   .card, .logo, .read-the-docs {
     font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  section {
+    padding: 1.2rem 0.4rem 0.6rem 0.4rem !important;
   }
 }
 

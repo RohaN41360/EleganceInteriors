@@ -1,297 +1,683 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { motion } from 'framer-motion';
+import { FiPlay, FiPause, FiImage, FiVideo } from 'react-icons/fi';
 import { db } from '../firebase';
-import { collection, getDocs, query, orderBy, limit, startAfter } from 'firebase/firestore';
-import { FiImage, FiGrid, FiChevronDown } from 'react-icons/fi';
-
-const CATEGORIES = [
-  'All',
-  'Modular Kitchen',
-  'Wardrobe',
-  'Ceiling',
-  'Living Room',
-  'Bedroom',
-  'TV Unit',
-  'False Ceiling',
-  'Other',
-];
-const PAGE_SIZE = 6;
+import { collection, getDocs, query, orderBy } from 'firebase/firestore';
+import LazyImage from './LazyImage';
 
 const Section = styled.section`
   padding: 5rem 1rem 2rem 1rem;
-  background: #f7f7fa;
+  background: var(--bg-primary);
+  transition: all 0.3s ease;
+  
+  @media (max-width: 900px) {
+    padding: 3rem 0.8rem 1.5rem 0.8rem;
+  }
+  
+  @media (max-width: 700px) {
+    padding: 2rem 0.6rem 1rem 0.6rem;
+  }
+  
+  @media (max-width: 600px) {
+    padding: 1.5rem 0.4rem 0.8rem 0.4rem;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 1.2rem 0.3rem 0.6rem 0.3rem;
+  }
 `;
+
 const Title = styled.h2`
   text-align: center;
   font-size: 2.2rem;
-  color: #232946;
-  margin-bottom: 2.5rem;
-  font-weight: 900;
-`;
-const FilterRow = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  justify-content: center;
-  margin-bottom: 2.5rem;
-`;
-const FilterBtn = styled.button`
-  background: ${({ active }) => (active ? 'linear-gradient(90deg, #7f5af0 0%, #00e6e6 100%)' : '#fff')};
-  color: ${({ active }) => (active ? '#fff' : '#232946')};
-  border: 2px solid #e6eaf0;
-  border-radius: 22px;
-  padding: 0.7rem 1.7rem;
-  font-size: 1.08rem;
+  color: var(--text-primary);
+  margin-bottom: 3rem;
   font-weight: 700;
-  cursor: pointer;
-  box-shadow: 0 2px 8px #7f5af011;
-  transition: background 0.18s, color 0.18s, border 0.18s;
-  &:hover, &:focus {
-    background: linear-gradient(90deg, #00e6e6 0%, #7f5af0 100%);
-    color: #fff;
-    border: 2px solid #7f5af0;
+  transition: color 0.3s ease;
+  
+  @media (max-width: 768px) {
+    font-size: 1.8rem;
+    margin-bottom: 2rem;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
   }
 `;
+
+const SectionTitle = styled.h3`
+  text-align: center;
+  font-size: 1.8rem;
+  color: var(--text-primary);
+  margin: 4rem 0 2rem 0;
+  font-weight: 600;
+  position: relative;
+  transition: color 0.3s ease;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(135deg, #e6b17a 0%, #7f5af0 100%);
+    border-radius: 2px;
+  }
+  
+  @media (max-width: 768px) {
+    font-size: 1.5rem;
+    margin: 3rem 0 1.5rem 0;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 1.3rem;
+    margin: 2rem 0 1rem 0;
+  }
+`;
+
 const Grid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 2.2rem 2vw;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
   max-width: 1200px;
-  margin: 0 auto 2.5rem auto;
-`;
-const Card = styled.div`
-  background: #fff;
-  border-radius: 18px;
-  box-shadow: 0 2px 12px rgba(44,83,100,0.10);
-  padding: 2rem 1.2rem 1.5rem 1.2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.1rem;
-  align-items: flex-start;
-  position: relative;
-  min-width: 0;
-  border: 1.5px solid #e6eaf0;
-  transition: box-shadow 0.2s, border 0.2s, transform 0.2s;
-  &:hover {
-    box-shadow: 0 8px 32px #7f5af033;
-    border-color: #7f5af0;
-    transform: translateY(-4px) scale(1.02);
+  margin: 0 auto;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+    gap: 1rem;
   }
 `;
-const CardTitle = styled.h3`
-  font-size: 1.25rem;
-  color: #232946;
-  font-weight: 800;
-  margin-bottom: 0.2rem;
+
+const Card = styled(motion.div)`
+  background: var(--bg-primary);
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px var(--shadow-color);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+  }
 `;
-const CardDesc = styled.p`
-  color: #4a6572;
-  font-size: 1.05rem;
-  margin-bottom: 0.5rem;
-`;
-const CardCategory = styled.div`
-  font-size: 0.98rem;
-  color: #7f5af0;
-  font-weight: 700;
-  margin-bottom: 0.7rem;
-  letter-spacing: 0.5px;
-`;
-const GalleryRow = styled.div`
-  display: flex;
-  gap: 0.7rem;
-  flex-wrap: wrap;
-  margin-bottom: 0.5rem;
-`;
-const GalleryMedia = styled.div`
+
+const CardImg = styled.div`
   position: relative;
   width: 100%;
-  max-width: 320px;
-  aspect-ratio: 16/10;
-  border-radius: 12px;
+  height: 250px;
   overflow: hidden;
-  background: #eee;
-  box-shadow: 0 2px 8px #7f5af011;
-  margin-bottom: 0.7rem;
+  
+  @media (max-width: 768px) {
+    height: 200px;
+  }
+  
+  @media (max-width: 480px) {
+    height: 180px;
+  }
+`;
+
+const MediaItem = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+  
+  &:hover {
+    transform: scale(1.05);
+  }
+`;
+
+const VideoItem = styled.video`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+  
+  &:hover {
+    transform: scale(1.05);
+  }
+`;
+
+const PlayButton = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-`;
-const GalleryImg = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 12px;
-  display: block;
-`;
-const GalleryVideo = styled.video`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 12px;
-  display: block;
-  background: #000;
-`;
-const LoadMoreBtn = styled.button`
-  display: block;
-  margin: 2.5rem auto 0 auto;
-  background: linear-gradient(90deg, #7f5af0 0%, #00e6e6 100%);
-  color: #fff;
-  border: none;
-  border-radius: 22px;
-  padding: 1rem 2.5rem;
-  font-size: 1.15rem;
-  font-weight: 800;
+  font-size: 1.5rem;
   cursor: pointer;
-  box-shadow: 0 2px 12px #7f5af022;
-  transition: background 0.18s, color 0.18s, box-shadow 0.18s;
-  &:hover, &:focus {
-    background: linear-gradient(90deg, #00e6e6 0%, #7f5af0 100%);
-    color: #fff;
-    box-shadow: 0 4px 24px #00e6e644;
+  transition: all 0.3s ease;
+  z-index: 2;
+  
+  &:hover {
+    background: rgba(230, 177, 122, 0.9);
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+  
+  @media (max-width: 768px) {
+    width: 50px;
+    height: 50px;
+    font-size: 1.2rem;
+  }
+  
+  @media (max-width: 480px) {
+    width: 45px;
+    height: 45px;
+    font-size: 1.1rem;
   }
 `;
+
+const LoadMoreBtn = styled(motion.button)`
+  background: linear-gradient(135deg, #e6b17a 0%, #7f5af0 100%);
+  color: #fff;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin: 2rem auto 0 auto;
+  display: block;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(230, 177, 122, 0.3);
+  }
+  
+  @media (max-width: 768px) {
+    padding: 0.8rem 1.5rem;
+    font-size: 0.9rem;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 0.7rem 1.2rem;
+    font-size: 0.85rem;
+  }
+`;
+
+// Lightbox Components
 const LightboxOverlay = styled.div`
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(44,41,70,0.85);
-  z-index: 1000;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+`;
+
+const LightboxContainer = styled.div`
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
   display: flex;
   align-items: center;
   justify-content: center;
 `;
-const LightboxImg = styled.img`
-  max-width: 90vw;
-  max-height: 80vh;
-  border-radius: 18px;
-  box-shadow: 0 8px 40px #7f5af066;
-  background: #fff;
+
+const LightboxImage = styled.img`
+  max-width: 100%;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 8px;
 `;
-const LightboxClose = styled.button`
+
+const LightboxVideo = styled.video`
+  max-width: 100%;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 8px;
+`;
+
+const CloseButton = styled.button`
   position: absolute;
-  top: 2.5rem;
-  right: 2.5rem;
-  background: none;
-  border: none;
+  top: 30px;
+  right: 30px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 2px solid rgba(255, 255, 255, 0.3);
   color: #fff;
-  font-size: 2.5rem;
+  font-size: 1.5rem;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
   cursor: pointer;
-  z-index: 1001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(15px);
+  transition: all 0.3s ease;
+  z-index: 10000;
+  font-weight: bold;
+  
+  @media (max-width: 768px) {
+    top: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    font-size: 1.2rem;
+  }
+  
+  @media (max-width: 480px) {
+    top: 15px;
+    right: 15px;
+    width: 45px;
+    height: 45px;
+    font-size: 1.1rem;
+  }
+  
   &:hover {
-    color: #00e6e6;
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: scale(1.1);
   }
 `;
 
-function Lightbox({ images, index, onClose }) {
-  const [current, setCurrent] = useState(index);
-  if (!images || images.length === 0) return null;
-  return (
-    <LightboxOverlay onClick={onClose}>
-      <LightboxImg src={images[current]} alt="Project" onClick={e => e.stopPropagation()} />
-      <LightboxClose onClick={onClose} title="Close"><FiImage /></LightboxClose>
-    </LightboxOverlay>
-  );
-}
-
-const MediaGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 2.2rem 2vw;
-  max-width: 1200px;
-  margin: 0 auto 2.5rem auto;
+const NavigationButton = styled.button`
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.15);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
+  font-size: 1.8rem;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(15px);
+  transition: all 0.3s ease;
+  z-index: 10000;
+  font-weight: bold;
+  opacity: ${props => props.visible ? 1 : 0.8};
+  pointer-events: auto;
+  
+  @media (max-width: 768px) {
+    width: 60px;
+    height: 60px;
+    font-size: 1.5rem;
+  }
+  
+  @media (max-width: 480px) {
+    width: 50px;
+    height: 50px;
+    font-size: 1.3rem;
+  }
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-50%) scale(1.1);
+    opacity: 1;
+  }
+  
+  &.prev {
+    left: 30px;
+    
+    @media (max-width: 768px) {
+      left: 20px;
+    }
+    
+    @media (max-width: 480px) {
+      left: 15px;
+    }
+  }
+  
+  &.next {
+    right: 30px;
+    
+    @media (max-width: 768px) {
+      right: 20px;
+    }
+    
+    @media (max-width: 480px) {
+      right: 15px;
+    }
+  }
 `;
-const SectionTitle = styled.h3`
-  font-size: 1.5rem;
-  color: #232946;
-  font-weight: 800;
-  margin: 2.5rem 0 1.2rem 0;
+
+const MediaCounter = styled.div`
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: 600;
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  
+  @media (max-width: 768px) {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 8px 16px;
+    font-size: 0.8rem;
+  }
+`;
+
+const NoMediaMessage = styled.div`
   text-align: center;
+  color: #666;
+  font-size: 1.1rem;
+  padding: 3rem 1rem;
+  background: #fff;
+  border-radius: 12px;
+  margin: 2rem 0;
+  
+  @media (max-width: 768px) {
+    font-size: 1rem;
+    padding: 2rem 1rem;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 0.95rem;
+    padding: 1.5rem 1rem;
+  }
+`;
+
+const SectionIcon = styled.div`
+  display: inline-block;
+  margin-right: 0.5rem;
+  font-size: 1.2rem;
+  color: #e6b17a;
+  
+  @media (max-width: 768px) {
+    font-size: 1.1rem;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 1rem;
+  }
 `;
 
 const OurProjects = () => {
   const [media, setMedia] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [lastDoc, setLastDoc] = useState(null);
-  const [hasMore, setHasMore] = useState(true);
-  const videoRefs = useRef({});
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [currentMediaIndex, setCurrentMediaIndex] = useState(0);
+  const [currentVideo, setCurrentVideo] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [showNavigation, setShowNavigation] = useState(true);
+  const [currentMediaType, setCurrentMediaType] = useState('image');
 
-  const fetchMedia = async (reset = false) => {
-    setLoading(true);
-    let q = query(
-      collection(db, 'media'),
-      orderBy('createdAt', 'desc'),
-      ...(reset ? [limit(PAGE_SIZE)] : [startAfter(lastDoc), limit(PAGE_SIZE)])
-    );
-    const snap = await getDocs(q);
-    const newMedia = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    setMedia(reset ? newMedia : [...media, ...newMedia]);
-    setLastDoc(snap.docs[snap.docs.length - 1]);
-    setHasMore(snap.docs.length === PAGE_SIZE);
-    setLoading(false);
+  useEffect(() => {
+    const fetchMedia = async () => {
+      try {
+        const mediaRef = collection(db, 'media');
+        const q = query(mediaRef, orderBy('createdAt', 'desc'));
+        const querySnapshot = await getDocs(q);
+        const mediaData = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setMedia(mediaData);
+      } catch (error) {
+        console.error('Error fetching media:', error);
+      }
+    };
+
+    fetchMedia();
+  }, []);
+
+  const images = media.filter(item => item.type === 'image');
+  const videos = media.filter(item => item.type === 'video');
+
+  const openLightbox = (index, type) => {
+    setCurrentMediaIndex(index);
+    setCurrentMediaType(type);
+    setLightboxOpen(true);
+    setShowNavigation(true);
+    
+    // Auto-hide navigation for videos after 1 second
+    if (type === 'video') {
+      setTimeout(() => {
+        setShowNavigation(false);
+      }, 1000);
+    }
+  };
+
+  const closeLightbox = () => {
+    setLightboxOpen(false);
+    setCurrentVideo(null);
+    setIsPlaying(false);
+    setShowNavigation(true);
+  };
+
+  const nextMedia = () => {
+    const currentMedia = currentMediaType === 'image' ? images : videos;
+    setCurrentMediaIndex((prev) => (prev + 1) % currentMedia.length);
+    setShowNavigation(true);
+    
+    // Keep navigation visible for videos
+    if (currentMediaType === 'video') {
+      setShowNavigation(true);
+    }
+  };
+
+  const prevMedia = () => {
+    const currentMedia = currentMediaType === 'image' ? images : videos;
+    setCurrentMediaIndex((prev) => (prev - 1 + currentMedia.length) % currentMedia.length);
+    setShowNavigation(true);
+    
+    // Keep navigation visible for videos
+    if (currentMediaType === 'video') {
+      setShowNavigation(true);
+    }
+  };
+
+  const handleVideoPlay = (videoElement) => {
+    if (videoElement.paused) {
+      videoElement.play();
+      setIsPlaying(true);
+    } else {
+      videoElement.pause();
+      setIsPlaying(false);
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Escape') {
+      closeLightbox();
+    } else if (e.key === 'ArrowRight') {
+      nextMedia();
+    } else if (e.key === 'ArrowLeft') {
+      prevMedia();
+    }
+  };
+
+  const handleMouseMove = () => {
+    if (currentMediaType === 'video') {
+      setShowNavigation(true);
+    }
   };
 
   useEffect(() => {
-    fetchMedia(true);
-    // eslint-disable-next-line
-  }, []);
-
-  const handleLoadMore = () => {
-    if (!hasMore || loading) return;
-    fetchMedia(false);
-  };
-
-  // Video hover handlers
-  const handleVideoPlay = (id) => {
-    if (videoRefs.current[id]) {
-      videoRefs.current[id].play();
+    if (lightboxOpen) {
+      document.addEventListener('keydown', handleKeyDown);
+      return () => document.removeEventListener('keydown', handleKeyDown);
     }
-  };
-  const handleVideoPause = (id) => {
-    if (videoRefs.current[id]) {
-      videoRefs.current[id].pause();
-      videoRefs.current[id].currentTime = 0;
-    }
-  };
+  }, [lightboxOpen]);
 
-  // Separate images and videos
-  const images = media.filter(item => item.type === 'image' || (item.url && !item.url.match(/\.(mp4|webm|mov)$/i)));
-  const videos = media.filter(item => item.type === 'video' || (item.url && item.url.match(/\.(mp4|webm|mov)$/i)));
+  const currentMedia = currentMediaType === 'image' ? images[currentMediaIndex] : videos[currentMediaIndex];
 
   return (
     <Section id="our-projects">
       <Title>Our Projects</Title>
-      <SectionTitle>Project Images</SectionTitle>
-      <MediaGrid>
-        {images.map(item => (
-          <GalleryMedia key={item.id}>
-            <GalleryImg src={item.url} alt={item.name || 'Project Image'} loading="lazy" />
-          </GalleryMedia>
-        ))}
-      </MediaGrid>
-      <SectionTitle>Project Videos</SectionTitle>
-      <MediaGrid>
-        {videos.map(item => (
-          <GalleryMedia key={item.id}>
-            <GalleryVideo
-              ref={el => (videoRefs.current[item.id] = el)}
+      
+      {/* Photo Tour Section */}
+      <motion.div
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        viewport={{ once: true }}
+      >
+        <SectionTitle>
+          <SectionIcon>
+            <FiImage />
+          </SectionIcon>
+          Photo Tour of Our Work
+        </SectionTitle>
+        
+        {images.length > 0 ? (
+          <Grid>
+            {images.map((item, index) => (
+              <Card 
+                key={item.id}
+                onClick={() => openLightbox(index, 'image')}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                viewport={{ once: true }}
+              >
+                <CardImg>
+                  <LazyImage src={item.url} alt={item.name || 'Project Image'} />
+                </CardImg>
+              </Card>
+            ))}
+          </Grid>
+        ) : (
+          <NoMediaMessage>
+            No project images available at the moment. Check back soon for updates!
+          </NoMediaMessage>
+        )}
+      </motion.div>
+
+      {/* Experience Our Work (Videos) Section */}
+      <motion.div
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.2 }}
+        viewport={{ once: true }}
+      >
+        <SectionTitle>
+          <SectionIcon>
+            <FiVideo />
+          </SectionIcon>
+          Experience Our Work (Videos)
+        </SectionTitle>
+        
+        {videos.length > 0 ? (
+          <Grid>
+            {videos.map((item, index) => (
+              <Card 
+                key={item.id}
+                onClick={() => openLightbox(index, 'video')}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                viewport={{ once: true }}
+              >
+                <CardImg>
+                  <VideoItem 
               src={item.url}
-              preload="none"
-              tabIndex={0}
-              poster={item.poster || ''}
-              onMouseEnter={() => handleVideoPlay(item.id)}
-              onMouseLeave={() => handleVideoPause(item.id)}
-              onFocus={() => handleVideoPlay(item.id)}
-              onBlur={() => handleVideoPause(item.id)}
-              controls={false}
-              playsInline
-              style={{ cursor: 'pointer' }}
-            />
-          </GalleryMedia>
-        ))}
-      </MediaGrid>
-      {hasMore && (
-        <LoadMoreBtn onClick={handleLoadMore} disabled={loading}>
-          {loading ? 'Loading...' : 'Load More'}
-        </LoadMoreBtn>
+                    muted 
+                    onMouseEnter={(e) => {
+                      e.target.play();
+                      setIsPlaying(true);
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.pause();
+                      setIsPlaying(false);
+                    }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleVideoPlay(e.target);
+                    }}
+                  />
+                  <PlayButton onClick={(e) => {
+                    e.stopPropagation();
+                    openLightbox(index, 'video');
+                  }}>
+                    <FiPlay />
+                  </PlayButton>
+                </CardImg>
+              </Card>
+            ))}
+          </Grid>
+        ) : (
+          <NoMediaMessage>
+            No project videos available at the moment. Check back soon for updates!
+          </NoMediaMessage>
+        )}
+      </motion.div>
+
+      {lightboxOpen && currentMedia && (
+        <LightboxOverlay onClick={closeLightbox} onMouseMove={handleMouseMove}>
+          <LightboxContainer onClick={(e) => e.stopPropagation()}>
+            {currentMediaType === 'image' ? (
+              <LightboxImage src={currentMedia.url} alt={currentMedia.name || 'Project Image'} />
+            ) : (
+              <LightboxVideo 
+                src={currentMedia.url} 
+                controls
+                autoPlay
+                muted={false}
+                ref={(el) => setCurrentVideo(el)}
+                onPlay={() => setIsPlaying(true)}
+                onPause={() => setIsPlaying(false)}
+              />
+            )}
+            
+            <CloseButton onClick={closeLightbox} aria-label="Close">✕</CloseButton>
+            
+            {(currentMediaType === 'image' ? images : videos).length > 1 && (
+              <>
+                <NavigationButton 
+                  className="prev" 
+                  onClick={prevMedia} 
+                  aria-label="Previous"
+                  visible={showNavigation}
+                >
+                  ‹
+                </NavigationButton>
+                <NavigationButton 
+                  className="next" 
+                  onClick={nextMedia} 
+                  aria-label="Next"
+                  visible={showNavigation}
+                >
+                  ›
+                </NavigationButton>
+                <MediaCounter>
+                  {currentMediaIndex + 1} / {(currentMediaType === 'image' ? images : videos).length}
+                </MediaCounter>
+              </>
+            )}
+          </LightboxContainer>
+        </LightboxOverlay>
       )}
     </Section>
   );

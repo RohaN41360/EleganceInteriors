@@ -7,20 +7,39 @@ import { FaPhoneAlt, FaEnvelope, FaInstagram, FaUser, FaPhone, FaCommentDots } f
 
 const Section = styled.section`
   padding: 5rem 1rem 2rem 1rem;
-  background: linear-gradient(120deg, #f7f5f2 60%, #e6b17a22 100%);
-  color: #1a3c2e;
+  background: var(--bg-section);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  
+  @media (max-width: 768px) {
+    padding: 3rem 0.8rem 1.5rem 0.8rem;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 2rem 0.6rem 1rem 0.6rem;
+  }
 `;
 const Container = styled(motion.div)`
   max-width: 900px;
   margin: 0 auto;
-  background: #fff;
+  background: var(--bg-primary);
   border-radius: 18px;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+  box-shadow: 0 4px 24px var(--shadow-color);
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  transition: all 0.3s ease;
+  
   @media (min-width: 800px) {
     flex-direction: row;
+  }
+  
+  @media (max-width: 768px) {
+    border-radius: 14px;
+  }
+  
+  @media (max-width: 480px) {
+    border-radius: 12px;
   }
 `;
 const Info = styled.div`
@@ -33,17 +52,45 @@ const Info = styled.div`
   justify-content: center;
   padding: 2.5rem 2rem;
   gap: 1.5rem;
+  
+  @media (max-width: 768px) {
+    padding: 2rem 1.5rem;
+    gap: 1.2rem;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 1.5rem 1.2rem;
+    gap: 1rem;
+  }
 `;
 const InfoTitle = styled.h3`
   font-size: 1.4rem;
   margin-bottom: 0.5rem;
   color: #e6b17a;
+  
+  @media (max-width: 768px) {
+    font-size: 1.2rem;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 1.1rem;
+  }
 `;
 const InfoItem = styled.div`
   display: flex;
   align-items: center;
   gap: 0.8rem;
   font-size: 1.1rem;
+  
+  @media (max-width: 768px) {
+    font-size: 1rem;
+    gap: 0.6rem;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 0.95rem;
+    gap: 0.5rem;
+  }
 `;
 const InstaLink = styled.a`
   color: #e6b17a;
@@ -52,35 +99,84 @@ const InstaLink = styled.a`
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  
+  @media (max-width: 768px) {
+    font-size: 0.95rem;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 0.9rem;
+  }
+  
   &:hover {
     text-decoration: underline;
   }
 `;
 const FormWrap = styled.div`
-  flex: 2;
-  padding: 2.5rem 2rem;
-  background: linear-gradient(120deg, #f7f5f2 60%, #e6b17a11 100%);
-  border-radius: 18px;
+  background: var(--bg-card);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px var(--shadow-color, rgba(0,0,0,0.1));
+  padding: 2.5rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border-color, rgba(230, 177, 122, 0.1));
+  
+  @media (max-width: 768px) {
+    padding: 2rem;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 1.5rem;
+  }
 `;
 const Title = styled.h2`
   text-align: left;
   font-size: 2.2rem;
-  color: #1a3c2e;
+  color: var(--text-primary);
   margin-bottom: 2.5rem;
   font-weight: 900;
   letter-spacing: 0.5px;
+  transition: color 0.3s ease;
+  
+  @media (max-width: 768px) {
+    font-size: 1.8rem;
+    margin-bottom: 2rem;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
 `;
 const Intro = styled.p`
   font-size: 1.18rem;
-  color: #1a3c2e;
+  color: var(--text-primary);
   margin-bottom: 1.7rem;
   text-align: left;
   font-weight: 500;
+  transition: color 0.3s ease;
+  
+  @media (max-width: 768px) {
+    font-size: 1.05rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 1rem;
+    margin-bottom: 1.2rem;
+  }
 `;
 const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  
+  @media (max-width: 768px) {
+    gap: 1.2rem;
+  }
+  
+  @media (max-width: 480px) {
+    gap: 1rem;
+  }
 `;
 const Field = styled.div`
   position: relative;
@@ -90,7 +186,7 @@ const Label = styled.label`
   position: absolute;
   top: 1.1rem;
   left: 2.7rem;
-  color: #1a3c2e;
+  color: var(--text-primary);
   font-size: 1.08rem;
   font-weight: 700;
   letter-spacing: 0.01em;
@@ -99,6 +195,19 @@ const Label = styled.label`
   transition: 0.18s all;
   opacity: 0.92;
   z-index: 2;
+  
+  @media (max-width: 768px) {
+    font-size: 1rem;
+    top: 1rem;
+    left: 2.5rem;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 0.95rem;
+    top: 0.9rem;
+    left: 2.3rem;
+  }
+  
   &.active {
     top: -0.7rem;
     left: 2.2rem;
@@ -109,6 +218,16 @@ const Label = styled.label`
     opacity: 1;
     color: #1a3c2e;
     font-weight: 800;
+    
+    @media (max-width: 768px) {
+      font-size: 0.85rem;
+      left: 2rem;
+    }
+    
+    @media (max-width: 480px) {
+      font-size: 0.8rem;
+      left: 1.8rem;
+    }
   }
 `;
 const InputIcon = styled.div`
@@ -119,26 +238,67 @@ const InputIcon = styled.div`
   color: #1a3c2e;
   font-size: 1.15rem;
   z-index: 3;
+  
+  @media (max-width: 768px) {
+    font-size: 1.1rem;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 1rem;
+  }
 `;
 const StyledInput = styled.input`
   width: 100%;
   box-sizing: border-box;
   padding: 1.1rem 1.2rem 1.1rem 2.7rem;
   border-radius: 12px;
-  border: 1.5px solid #1a3c2e;
+  border: 1.5px solid var(--text-primary);
   font-size: 1.08rem;
-  background: #fff;
-  color: #232946;
-  box-shadow: 0 1.5px 8px #7f5af011;
-  transition: border 0.18s, box-shadow 0.18s;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  box-shadow: 0 1.5px 8px var(--shadow-color);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   margin-bottom: 0.2rem;
   appearance: none;
   line-height: 1.2;
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(230, 177, 122, 0.1), rgba(127, 90, 240, 0.1));
+    border-radius: 12px;
+    opacity: 0;
+    transition: all 0.3s ease;
+  }
+  
+  @media (max-width: 768px) {
+    padding: 1rem 1.1rem 1rem 2.5rem;
+    font-size: 1rem;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 0.9rem 1rem 0.9rem 2.3rem;
+    font-size: 0.95rem;
+  }
+  
+  &:hover {
+    border: 1.5px solid #e6b17a;
+    box-shadow: 0 4px 16px rgba(230, 177, 122, 0.2);
+    transform: translateY(-2px);
+  }
+  
   &:focus {
     border: 1.5px solid #7f5af0;
     outline: none;
-    box-shadow: 0 2px 12px #7f5af044;
-    background: #f7f5f2;
+    box-shadow: 0 6px 20px rgba(127, 90, 240, 0.3);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    transform: translateY(-2px);
   }
 `;
 const StyledTextArea = styled.textarea`
@@ -146,24 +306,46 @@ const StyledTextArea = styled.textarea`
   box-sizing: border-box;
   padding: 1.1rem 1.2rem 1.1rem 2.7rem;
   border-radius: 12px;
-  border: 1.5px solid #1a3c2e;
+  border: 1.5px solid var(--text-primary);
   font-size: 1.08rem;
-  background: #fff;
-  color: #232946;
-  box-shadow: 0 1.5px 8px #7f5af011;
-  transition: border 0.18s, box-shadow 0.18s;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  box-shadow: 0 1.5px 8px var(--shadow-color);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   margin-bottom: 0.2rem;
   min-height: 110px;
   resize: vertical;
+  position: relative;
+  
+  @media (max-width: 768px) {
+    padding: 1rem 1.1rem 1rem 2.5rem;
+    font-size: 1rem;
+    min-height: 100px;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 0.9rem 1rem 0.9rem 2.3rem;
+    font-size: 0.95rem;
+    min-height: 90px;
+  }
+  
+  &:hover {
+    border: 1.5px solid #e6b17a;
+    box-shadow: 0 4px 16px rgba(230, 177, 122, 0.2);
+    transform: translateY(-2px);
+  }
+  
   &:focus {
     border: 1.5px solid #7f5af0;
     outline: none;
-    box-shadow: 0 2px 12px #7f5af044;
-    background: #f7f5f2;
+    box-shadow: 0 6px 20px rgba(127, 90, 240, 0.3);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    transform: translateY(-2px);
   }
 `;
 const Button = styled(motion.button)`
-  background: #1a3c2e;
+  background: linear-gradient(135deg, var(--cta-color, #1a3c2e) 0%, var(--accent-primary, #2d5a4a) 100%);
   color: #fff;
   padding: 0.8rem 2.2rem;
   border-radius: 30px;
@@ -171,12 +353,59 @@ const Button = styled(motion.button)`
   font-weight: 600;
   border: none;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-  transition: background 0.2s, color 0.2s, border 0.2s;
+  box-shadow: 0 4px 16px rgba(26, 60, 46, 0.2);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+  }
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(135deg, #e6b17a, #7f5af0, #e6b17a);
+    border-radius: 32px;
+    opacity: 0;
+    transition: all 0.4s ease;
+    z-index: -1;
+  }
+  
+  @media (max-width: 768px) {
+    padding: 0.7rem 1.8rem;
+    font-size: 1rem;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 0.6rem 1.5rem;
+    font-size: 0.95rem;
+  }
+  
   &:hover, &:focus {
-    background: #fff;
-    color: #1a3c2e;
-    border: 1.5px solid #1a3c2e;
+    background: linear-gradient(135deg, #e6b17a 0%, #7f5af0 100%);
+    color: #fff;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(230, 177, 122, 0.3);
+    
+    &::before {
+      left: 100%;
+    }
+    
+    &::after {
+      opacity: 1;
+    }
   }
 `;
 const SuccessMsg = styled.p`
@@ -213,10 +442,16 @@ const Modal = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 1.2rem;
+  
   @media (max-width: 600px) {
     width: 98vw;
-    padding: 1.2rem 0.5rem 1.2rem 0.5rem;
-    gap: 1.2rem;
+    padding: 1.5rem 1rem 1.5rem 1rem;
+    gap: 1rem;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 1.2rem 0.8rem 1.2rem 0.8rem;
+    gap: 0.8rem;
   }
 `;
 const ModalClose = styled.button`
@@ -237,6 +472,13 @@ const ModalClose = styled.button`
   box-shadow: 0 2px 8px #7f5af022;
   transition: background 0.18s, color 0.18s, box-shadow 0.18s;
   z-index: 10;
+  
+  @media (max-width: 480px) {
+    width: 2rem;
+    height: 2rem;
+    font-size: 1.8rem;
+  }
+  
   &:hover, &:focus {
     background: #ff5959;
     color: #fff;
@@ -310,13 +552,13 @@ const Contact = () => {
       <Container initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
         <Info>
           <InfoTitle>Contact Information</InfoTitle>
-          <InfoItem><FaPhoneAlt color="#1a3c2e" /> +91 99999 99999</InfoItem>
+          <InfoItem><FaPhoneAlt color="#1a3c2e" /> +91 88064 14374</InfoItem>
           <InfoItem><FaEnvelope color="#1a3c2e" /> info@eleganceinteriors.com</InfoItem>
           <InstaLink href="https://www.instagram.com/elegance_interiors_pune/?igsh=MWdwcWR0bmo4cm5keg%3D%3D" target="_blank" rel="noopener noreferrer"><FaInstagram color="#1a3c2e" /> elegance_interiors_pune</InstaLink>
         </Info>
         <FormWrap>
-          <Title>We’d Love to Hear From You</Title>
-          <Intro>We’d love to hear from you! Fill out the form and our team will get back to you soon.</Intro>
+          <Title>We'd Love to Hear From You</Title>
+          <Intro>We'd love to hear from you! Fill out the form and our team will get back to you soon.</Intro>
           <StyledForm autoComplete="on" onSubmit={sendMessage}>
             <Field>
               <InputIcon><FaUser /></InputIcon>
@@ -378,13 +620,13 @@ const Contact = () => {
             {showModal && (
               <ModalOverlay onClick={()=>setShowModal(false)}>
                 <Modal onClick={e=>e.stopPropagation()}>
+                  <ModalClose onClick={()=>setShowModal(false)}>&times;</ModalClose>
                   <div style={{
                     color: modalType==='success' ? '#1a3c2e' : '#ff5959',
                     fontWeight: 700,
                     fontSize: '1.15rem',
                     textAlign: 'center',
                     marginBottom: '0.7rem',
-                    marginTop: '1.2rem',
                   }}>{modalMsg}</div>
                   <div style={{color:'#888',fontSize:'0.98rem',textAlign:'center'}}>This will close automatically in 5 seconds.</div>
                 </Modal>
