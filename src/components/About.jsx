@@ -10,7 +10,7 @@ const AboutSection = styled.section`
   justify-content: center;
   gap: 2.5rem;
   padding: 5rem 1rem 2rem 1rem;
-  background: var(--bg-primary);
+  background: var(--bg-secondary);
   transition: all 0.3s ease;
   
   @media (max-width: 900px) {

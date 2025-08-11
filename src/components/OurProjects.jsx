@@ -485,7 +485,7 @@ const OurProjects = () => {
 
   const prevMedia = () => {
     const currentMedia = currentMediaType === 'image' ? images : videos;
-    setCurrentMediaIndex((prev) => (prev - 1 + currentMedia.length) % currentMedia.length);
+    setCurrentMediaIndex((prev) => (prev  + currentMedia.length) % currentMedia.length);
     setShowNavigation(true);
     
     // Keep navigation visible for videos

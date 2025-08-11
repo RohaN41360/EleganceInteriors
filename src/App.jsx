@@ -3,6 +3,8 @@ import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
 import Services from './components/Services';
+import GetQuote from './components/GetQuote';
+import WhyChooseUs from './components/WhyChooseUs';
 import Reviews from './components/Reviews';
 import Contact from './components/Contact';
 import WhatsAppButton from './components/WhatsAppButton';
@@ -24,8 +26,10 @@ function App() {
         <Hero />
         <About />
         <Services />
+        <GetQuote />
         <OurProjects />
         <CommercialProjects />
+        <WhyChooseUs />
         <Reviews />
         <Contact />
         <SocialTiles />

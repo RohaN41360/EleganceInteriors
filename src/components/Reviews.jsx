@@ -8,7 +8,7 @@ import { collection, getDocs, query, where } from 'firebase/firestore';
 
 const Section = styled.section`
   padding: 5rem 1rem 2rem 1rem;
-  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+  background: var(--bg-secondary);
   transition: all 0.3s ease;
   
   @media (max-width: 768px) {

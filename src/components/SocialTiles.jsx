@@ -208,20 +208,20 @@ const socialData = [
     icon: <FaWhatsapp />,
     title: "WhatsApp",
     description: "Get instant responses to your queries and project discussions",
-    contact: "+91 98765 43210",
+    contact: "+91 8806414374",
     bgColor: "#25d366",
     hoverBgColor: "#128c7e",
-    href: "https://wa.me/919876543210"
+    href: "https://wa.me/918806414374"
   },
   {
     id: 2,
     icon: <FaPhone />,
     title: "Phone Call",
     description: "Speak directly with our expert team for detailed consultations",
-    contact: "+91 98765 43210",
+    contact: "+91 8806414374",
     bgColor: "#e6b17a",
     hoverBgColor: "#d4a06a",
-    href: "tel:+919876543210"
+    href: "tel:+918806414374"
   },
   {
     id: 3,

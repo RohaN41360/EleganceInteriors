@@ -26,14 +26,14 @@ const MainButton = styled(motion.button)`
   height: 60px;
   border-radius: 50%;
   border: none;
-  background: linear-gradient(135deg, var(--cta-color, #e6b17a) 0%, var(--accent-primary, #7f5af0) 100%);
+  background: linear-gradient(135deg, #e6b17a 0%, #7f5af0 100%);
   color: white;
   font-size: 1.5rem;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 15px rgba(230, 177, 122, 0.3);
   position: relative;
   z-index: 10;
   
@@ -53,7 +53,7 @@ const MainButton = styled(motion.button)`
   
   &:hover {
     transform: scale(1.1);
-    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 6px 20px rgba(230, 177, 122, 0.4);
     
     &::before {
       opacity: 1;
@@ -116,13 +116,13 @@ const FloatingActionButton = () => {
   const actions = [
     {
       icon: <FaWhatsapp />,
-      href: 'https://wa.me/919876543210',
+      href: 'https://wa.me/918806414374',
       bgColor: '#25d366',
       label: 'WhatsApp'
     },
     {
       icon: <FaPhone />,
-      href: 'tel:+919876543210',
+      href: 'tel:+918806414374',
       bgColor: '#e6b17a',
       label: 'Call'
     },
