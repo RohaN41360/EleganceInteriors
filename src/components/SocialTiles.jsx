@@ -222,7 +222,7 @@ const socialData = [
     bgColor: "#e6b17a",
     hoverBgColor: "#d4a06a",
     href: "tel:+918806414374"
-  },
+    },
   {
     id: 3,
     icon: <FaEnvelope />,
