@@ -8,6 +8,10 @@ const Container = styled.div`
   padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
+  
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
 `;
 
 const Title = styled.h2`
@@ -15,6 +19,11 @@ const Title = styled.h2`
   color: #1a3c2e;
   margin-bottom: 2rem;
   text-align: center;
+  
+  @media (max-width: 768px) {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
 `;
 
 const StatsContainer = styled.div`
@@ -22,6 +31,16 @@ const StatsContainer = styled.div`
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1rem;
   margin-bottom: 2rem;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.6rem;
+  }
+  
+  @media (max-width: 480px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+  }
 `;
 
 const StatCard = styled.div`
@@ -41,6 +60,34 @@ const StatCard = styled.div`
     color: #666;
     font-weight: 600;
   }
+  
+  @media (max-width: 768px) {
+    padding: 0.8rem;
+    border-radius: 8px;
+    
+    h3 {
+      font-size: 1.3rem;
+      margin-bottom: 0.3rem;
+    }
+    
+    p {
+      font-size: 0.8rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    padding: 0.6rem;
+    border-radius: 6px;
+    
+    h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.2rem;
+    }
+    
+    p {
+      font-size: 0.7rem;
+    }
+  }
 `;
 
 const TabsContainer = styled.div`
@@ -48,6 +95,12 @@ const TabsContainer = styled.div`
   gap: 1rem;
   margin-bottom: 2rem;
   border-bottom: 2px solid #e6e6e6;
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 0.5rem;
+    border-bottom: none;
+  }
 `;
 
 const Tab = styled.button`
@@ -64,6 +117,19 @@ const Tab = styled.button`
   &:hover {
     color: #e6b17a;
   }
+  
+  @media (max-width: 768px) {
+    padding: 0.8rem 1rem;
+    font-size: 0.9rem;
+    border-bottom: none;
+    border-radius: 8px;
+    background: ${props => props.active ? '#e6b17a' : '#f5f5f5'};
+    color: ${props => props.active ? '#fff' : '#666'};
+    
+    &:hover {
+      background: ${props => props.active ? '#e6b17a' : '#e0e0e0'};
+    }
+  }
 `;
 
 const ReviewsGrid = styled.div`
@@ -77,14 +143,24 @@ const ReviewCard = styled.div`
   padding: 1.5rem;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   border-left: 4px solid ${props => props.approved ? '#28a745' : '#ffc107'};
+  
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
 `;
 
 const ReviewHeader = styled.div`
   display: flex;
-  justify-content: between;
+  justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
   gap: 1rem;
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
 `;
 
 const ReviewInfo = styled.div`
@@ -95,6 +171,10 @@ const ReviewName = styled.h4`
   font-size: 1.1rem;
   color: #1a3c2e;
   margin-bottom: 0.25rem;
+  
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
 `;
 
 const ReviewLocation = styled.p`

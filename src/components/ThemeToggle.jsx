@@ -25,12 +25,14 @@ const ToggleSwitch = styled.div`
   position: relative;
   width: 60px;
   height: 30px;
-  background: ${props => props.isDark ? '#2C3432' : '#e2e8f0'};
+  background: ${props => props.isDark ? '#1a1a1a' : '#e2e8f0'};
   border-radius: 15px;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  border: 2px solid ${props => props.isDark ? '#3C4744' : '#cbd5e0'};
+  box-shadow: ${props => props.isDark 
+    ? '0 0 10px rgba(0, 255, 255, 0.3), 0 0 20px rgba(0, 255, 255, 0.1)' 
+    : '0 2px 10px rgba(0, 0, 0, 0.1)'};
+  border: 2px solid ${props => props.isDark ? '#00FFFF' : '#cbd5e0'};
   
   &::before {
     content: '';
@@ -39,15 +41,19 @@ const ToggleSwitch = styled.div`
     left: ${props => props.isDark ? '32px' : '2px'};
     width: 26px;
     height: 26px;
-    background: ${props => props.isDark ? '#F0F4ED' : '#fff'};
+    background: ${props => props.isDark ? '#00FFFF' : '#fff'};
     border-radius: 50%;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: ${props => props.isDark 
+      ? '0 0 8px rgba(0, 255, 255, 0.6), 0 0 16px rgba(0, 255, 255, 0.4)' 
+      : '0 2px 8px rgba(0, 0, 0, 0.2)'};
   }
   
   &:hover {
     transform: scale(1.05);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    box-shadow: ${props => props.isDark 
+      ? '0 0 15px rgba(0, 255, 255, 0.5), 0 0 25px rgba(0, 255, 255, 0.3)' 
+      : '0 4px 15px rgba(0, 0, 0, 0.15)'};
   }
   
   @media (max-width: 768px) {
@@ -109,13 +115,19 @@ const Icon = styled.div`
 `;
 
 const SunIcon = styled(FaSun)`
-  color: #FFD700;
-  filter: drop-shadow(0 0 2px rgba(255, 215, 0, 0.3));
+  color: ${props => props.isDark ? '#FFFF00' : '#FFD700'};
+  filter: ${props => props.isDark 
+    ? 'drop-shadow(0 0 3px rgba(255, 255, 0, 0.6)) drop-shadow(0 0 6px rgba(255, 255, 0, 0.4))' 
+    : 'drop-shadow(0 0 2px rgba(255, 215, 0, 0.3))'};
+  transition: all 0.3s ease;
 `;
 
 const MoonIcon = styled(FaMoon)`
-  color: #E0E0E0;
-  filter: drop-shadow(0 0 2px rgba(224, 224, 224, 0.3));
+  color: ${props => props.isDark ? '#00FFFF' : '#E0E0E0'};
+  filter: ${props => props.isDark 
+    ? 'drop-shadow(0 0 3px rgba(0, 255, 255, 0.6)) drop-shadow(0 0 6px rgba(0, 255, 255, 0.4))' 
+    : 'drop-shadow(0 0 2px rgba(224, 224, 224, 0.3))'};
+  transition: all 0.3s ease;
 `;
 
 const ThemeToggle = () => {
@@ -136,10 +148,10 @@ const ThemeToggle = () => {
         >
           <IconContainer>
             <Icon isDark={isDark} active={!isDark}>
-              <SunIcon />
+              <SunIcon isDark={isDark} />
             </Icon>
             <Icon isDark={isDark} active={isDark}>
-              <MoonIcon />
+              <MoonIcon isDark={isDark} />
             </Icon>
           </IconContainer>
         </ToggleSwitch>

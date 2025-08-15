@@ -208,30 +208,30 @@ const socialData = [
     icon: <FaWhatsapp />,
     title: "WhatsApp",
     description: "Get instant responses to your queries and project discussions",
-    contact: "+91 98765 43210",
+    contact: "+91 8806414374",
     bgColor: "#25d366",
     hoverBgColor: "#128c7e",
-    href: "https://wa.me/919876543210"
+    href: "https://wa.me/918806414374"
   },
   {
     id: 2,
     icon: <FaPhone />,
     title: "Phone Call",
     description: "Speak directly with our expert team for detailed consultations",
-    contact: "+91 98765 43210",
+    contact: "+91 8806414374",
     bgColor: "#e6b17a",
     hoverBgColor: "#d4a06a",
-    href: "tel:+91 88064 14374"
-  },
+    href: "tel:+918806414374"
+    },
   {
     id: 3,
     icon: <FaEnvelope />,
     title: "Email",
     description: "Send us detailed project requirements and get comprehensive quotes",
-    contact: "info@elegance.com",
+    contact: "eleganceinterior4868@gmail.com",
     bgColor: "#7f5af0",
     hoverBgColor: "#6b4fd8",
-    href: "mailto:info@elegance.com"
+    href: "mailto:eleganceinterior4868@gmail.com"
   },
   {
     id: 4,
@@ -256,13 +256,15 @@ const socialData = [
 ];
 
 const SocialTiles = () => {
+  // Filter out Facebook tile
+  const filteredSocialData = socialData.filter(social => social.title !== 'Facebook');
   return (
     <SocialSection id="social">
       <Title>Connect With Us</Title>
       <Subtitle>Get in touch with us through your preferred platform</Subtitle>
       
       <TilesContainer>
-        {socialData.map((social, index) => (
+        {filteredSocialData.map((social, index) => (
           <SocialTile
             key={social.id}
             as="a"

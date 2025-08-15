@@ -32,7 +32,7 @@ const videos = [
 
 const Section = styled.section`
   padding: 5rem 1rem 2rem 1rem;
-  background: var(--bg-section);
+  background: var(--bg-primary);
   backdrop-filter: blur(10px);
   transition: all 0.3s ease;
   

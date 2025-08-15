@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { motion } from 'framer-motion';
-import { FiPlay, FiPause, FiImage, FiVideo } from 'react-icons/fi';
+import React, { useState, useEffect, useCallback } from 'react';
+import styled, { css } from 'styled-components';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FiPlay, FiPause, FiImage, FiVideo, FiX, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import { db } from '../firebase';
 import { collection, getDocs, query, orderBy } from 'firebase/firestore';
 import LazyImage from './LazyImage';
 
 const Section = styled.section`
   padding: 5rem 1rem 2rem 1rem;
-  background: var(--bg-primary);
+  background: var(--bg-secondary, #fff);
   transition: all 0.3s ease;
   
   @media (max-width: 900px) {
@@ -213,175 +213,137 @@ const LoadMoreBtn = styled(motion.button)`
   }
 `;
 
-// Lightbox Components
-const LightboxOverlay = styled.div`
+// Modern, responsive styled-components for carousel
+const CarouselOverlay = styled(motion.div)`
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.95);
+  inset: 0;
+  background: rgba(0,0,0,0.95);
   z-index: 9999;
   display: flex;
   align-items: center;
   justify-content: center;
   backdrop-filter: blur(10px);
 `;
-
-const LightboxContainer = styled.div`
+const CarouselContainer = styled(motion.div)`
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(30,30,30,0.98);
+  border-radius: 16px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.35);
+  max-width: 96vw;
+  max-height: 90vh;
+  padding: 0;
+  overflow: hidden;
+  @media (max-width: 900px) {
+    max-width: 99vw;
+    max-height: 92vh;
+    border-radius: 10px;
+  }
+  @media (max-width: 600px) {
+    max-width: 100vw;
+    max-height: 98vh;
+    border-radius: 6px;
+  }
+`;
+const CarouselMedia = styled(motion.div)`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #181818;
+`;
+const CarouselImage = styled.img`
   max-width: 90vw;
-  max-height: 90vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const LightboxImage = styled.img`
-  max-width: 100%;
-  max-height: 90vh;
+  max-height: 80vh;
   object-fit: contain;
-  border-radius: 8px;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.18);
+  @media (max-width: 600px) {
+    max-width: 98vw;
+    max-height: 70vh;
+    border-radius: 6px;
+  }
 `;
-
-const LightboxVideo = styled.video`
-  max-width: 100%;
-  max-height: 90vh;
+const CarouselVideo = styled.video`
+  max-width: 90vw;
+  max-height: 80vh;
   object-fit: contain;
-  border-radius: 8px;
-`;
-
-const CloseButton = styled.button`
-  position: absolute;
-  top: 30px;
-  right: 30px;
-  background: rgba(255, 255, 255, 0.15);
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  color: #fff;
-  font-size: 1.5rem;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  backdrop-filter: blur(15px);
-  transition: all 0.3s ease;
-  z-index: 10000;
-  font-weight: bold;
-  
-  @media (max-width: 768px) {
-    top: 20px;
-    right: 20px;
-    width: 50px;
-    height: 50px;
-    font-size: 1.2rem;
-  }
-  
-  @media (max-width: 480px) {
-    top: 15px;
-    right: 15px;
-    width: 45px;
-    height: 45px;
-    font-size: 1.1rem;
-  }
-  
-  &:hover {
-    background: rgba(255, 255, 255, 0.25);
-    border-color: rgba(255, 255, 255, 0.5);
-    transform: scale(1.1);
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.18);
+  background: #000;
+  @media (max-width: 600px) {
+    max-width: 98vw;
+    max-height: 70vh;
+    border-radius: 6px;
   }
 `;
-
-const NavigationButton = styled.button`
+const CarouselButton = styled.button`
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(255, 255, 255, 0.15);
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  background: transparent !important;
+  border: none !important;
   color: #fff;
-  font-size: 1.8rem;
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
+  font-size: 2.5rem;
+  width: auto;
+  height: auto;
+  border-radius: 0;
   cursor: pointer;
+  z-index: 10001;
   display: flex;
   align-items: center;
   justify-content: center;
-  backdrop-filter: blur(15px);
-  transition: all 0.3s ease;
-  z-index: 10000;
-  font-weight: bold;
-  opacity: ${props => props.visible ? 1 : 0.8};
-  pointer-events: auto;
-  
-  @media (max-width: 768px) {
-    width: 60px;
-    height: 60px;
-    font-size: 1.5rem;
+  transition: color 0.2s, transform 0.2s;
+  box-shadow: none;
+  &:hover, &:focus {
+    color: #e6b17a;
+    outline: none;
+    background: transparent !important;
+    border: none !important;
+    transform: translateY(-50%) scale(1.08);
   }
-  
-  @media (max-width: 480px) {
-    width: 50px;
-    height: 50px;
-    font-size: 1.3rem;
-  }
-  
-  &:hover {
-    background: rgba(255, 255, 255, 0.25);
-    border-color: rgba(255, 255, 255, 0.5);
-    transform: translateY(-50%) scale(1.1);
-    opacity: 1;
-  }
-  
-  &.prev {
-    left: 30px;
-    
-    @media (max-width: 768px) {
-      left: 20px;
-    }
-    
-    @media (max-width: 480px) {
-      left: 15px;
-    }
-  }
-  
-  &.next {
-    right: 30px;
-    
-    @media (max-width: 768px) {
-      right: 20px;
-    }
-    
-    @media (max-width: 480px) {
-      right: 15px;
-    }
+  @media (max-width: 600px) {
+    font-size: 1.7rem;
   }
 `;
-
-const MediaCounter = styled.div`
+const CarouselButtonPrev = styled(CarouselButton)`
+  left: 18px;
+  @media (max-width: 600px) { left: 6px; }
+`;
+const CarouselButtonNext = styled(CarouselButton)`
+  right: 18px;
+  @media (max-width: 600px) { right: 6px; }
+`;
+const CarouselClose = styled(CarouselButton)`
+  top: 24px;
+  right: 24px;
+  left: auto;
+  transform: none;
+  @media (max-width: 600px) {
+    top: 8px;
+    right: 8px;
+  }
+`;
+const CarouselCounter = styled.div`
   position: absolute;
-  bottom: 30px;
+  bottom: 18px;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0,0,0,0.8);
   color: #fff;
-  padding: 12px 24px;
-  border-radius: 25px;
+  padding: 8px 18px;
+  border-radius: 18px;
   font-size: 1rem;
   font-weight: 600;
-  backdrop-filter: blur(15px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  
-  @media (max-width: 768px) {
-    padding: 10px 20px;
+  z-index: 10001;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  @media (max-width: 600px) {
     font-size: 0.9rem;
-  }
-  
-  @media (max-width: 480px) {
-    padding: 8px 16px;
-    font-size: 0.8rem;
+    padding: 6px 12px;
+    bottom: 8px;
   }
 `;
 
@@ -463,6 +425,8 @@ const OurProjects = () => {
         setShowNavigation(false);
       }, 1000);
     }
+    // Dispatch custom event to close mobile drawer
+    window.dispatchEvent(new Event('closeDrawer'));
   };
 
   const closeLightbox = () => {
@@ -470,6 +434,8 @@ const OurProjects = () => {
     setCurrentVideo(null);
     setIsPlaying(false);
     setShowNavigation(true);
+    // Dispatch custom event to close mobile drawer
+    window.dispatchEvent(new Event('closeDrawer'));
   };
 
   const nextMedia = () => {
@@ -487,8 +453,6 @@ const OurProjects = () => {
     const currentMedia = currentMediaType === 'image' ? images : videos;
     setCurrentMediaIndex((prev) => (prev - 1 + currentMedia.length) % currentMedia.length);
     setShowNavigation(true);
-    
-    // Keep navigation visible for videos
     if (currentMediaType === 'video') {
       setShowNavigation(true);
     }
@@ -635,49 +599,72 @@ const OurProjects = () => {
       </motion.div>
 
       {lightboxOpen && currentMedia && (
-        <LightboxOverlay onClick={closeLightbox} onMouseMove={handleMouseMove}>
-          <LightboxContainer onClick={(e) => e.stopPropagation()}>
-            {currentMediaType === 'image' ? (
-              <LightboxImage src={currentMedia.url} alt={currentMedia.name || 'Project Image'} />
-            ) : (
-              <LightboxVideo 
-                src={currentMedia.url} 
-                controls
-                autoPlay
-                muted={false}
-                ref={(el) => setCurrentVideo(el)}
-                onPlay={() => setIsPlaying(true)}
-                onPause={() => setIsPlaying(false)}
-              />
-            )}
-            
-            <CloseButton onClick={closeLightbox} aria-label="Close">✕</CloseButton>
-            
-            {(currentMediaType === 'image' ? images : videos).length > 1 && (
-              <>
-                <NavigationButton 
-                  className="prev" 
-                  onClick={prevMedia} 
-                  aria-label="Previous"
-                  visible={showNavigation}
-                >
-                  ‹
-                </NavigationButton>
-                <NavigationButton 
-                  className="next" 
-                  onClick={nextMedia} 
-                  aria-label="Next"
-                  visible={showNavigation}
-                >
-                  ›
-                </NavigationButton>
-                <MediaCounter>
-                  {currentMediaIndex + 1} / {(currentMediaType === 'image' ? images : videos).length}
-                </MediaCounter>
-              </>
-            )}
-          </LightboxContainer>
-        </LightboxOverlay>
+        <AnimatePresence>
+          <CarouselOverlay
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            onClick={closeLightbox}
+          >
+            <CarouselContainer
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              onClick={e => e.stopPropagation()}
+            >
+              <CarouselMedia>
+                {currentMediaType === 'image' ? (
+                  <CarouselImage
+                    src={currentMedia.url}
+                    alt={currentMedia.name || 'Project Image'}
+                    as={motion.img}
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -30 }}
+                    transition={{ duration: 0.3 }}
+                  />
+                ) : (
+                  <CarouselVideo
+                    src={currentMedia.url}
+                    controls
+                    autoPlay
+                    muted={false}
+                    ref={el => setCurrentVideo(el)}
+                    onPlay={() => setIsPlaying(true)}
+                    onPause={() => setIsPlaying(false)}
+                    as={motion.video}
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -30 }}
+                    transition={{ duration: 0.3 }}
+                  />
+                )}
+              </CarouselMedia>
+              {/* Navigation Controls */}
+              {(currentMediaType === 'image' ? images : videos).length > 1 && (
+                <>
+                  <CarouselButtonPrev onClick={prevMedia} aria-label="Previous">
+                    <FiChevronLeft />
+                    <span style={{ position: 'absolute', left: '-9999px' }}>Previous</span>
+                  </CarouselButtonPrev>
+                  <CarouselButtonNext onClick={nextMedia} aria-label="Next">
+                    <FiChevronRight />
+                    <span style={{ position: 'absolute', left: '-9999px' }}>Next</span>
+                  </CarouselButtonNext>
+                  <CarouselCounter>
+                    {currentMediaIndex + 1} / {(currentMediaType === 'image' ? images : videos).length}
+                  </CarouselCounter>
+                </>
+              )}
+              <CarouselClose onClick={closeLightbox} aria-label="Close">
+                <FiX />
+                <span style={{ position: 'absolute', left: '-9999px' }}>Close</span>
+              </CarouselClose>
+            </CarouselContainer>
+          </CarouselOverlay>
+        </AnimatePresence>
       )}
     </Section>
   );

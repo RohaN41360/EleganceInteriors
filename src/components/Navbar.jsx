@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import { FaHammer, FaHome, FaStar, FaEnvelope, FaBars, FaTimes, FaSun, FaMoon, FaBuilding } from 'react-icons/fa';
 import { Link } from 'react-scroll';
@@ -13,6 +13,13 @@ const Nav = styled.nav`
   left: 0;
   z-index: 2000;
   transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  
+  /* Ensure navbar uses the updated dark theme colors */
+  &[data-theme="dark"] {
+    background: #1a1a1a;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+  }
 `;
 const NavContainer = styled.div`
   max-width: 1200px;
@@ -41,25 +48,49 @@ const Logo = styled.div`
   letter-spacing: 1px;
   transition: color 0.3s ease;
 `;
+const LogoWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: ${props => props.isDark ? 'rgba(255, 255, 255, 0.95)' : 'transparent'};
+  border-radius: 8px;
+  padding: ${props => props.isDark ? '0.5rem' : '0'};
+  margin-right: 1.5rem;
+  box-shadow: ${props => props.isDark ? '0 4px 15px rgba(0, 0, 0, 0.1)' : 'none'};
+  
+  @media (max-width: 768px) {
+    margin-right: 1rem;
+    padding: ${props => props.isDark ? '0.4rem' : '0'};
+  }
+  
+  @media (max-width: 600px) {
+    margin-right: 0.7rem;
+    padding: ${props => props.isDark ? '0.3rem' : '0'};
+  }
+  
+  @media (max-width: 480px) {
+    margin-right: 0.5rem;
+    padding: ${props => props.isDark ? '0.2rem' : '0'};
+  }
+`;
+
 const LogoImg = styled.img`
   height: 48px;
   max-width: 180px;
   object-fit: contain;
-  margin-right: 1.5rem;
+  filter: ${props => props.isDark ? 'brightness(1.2) contrast(1.3) saturate(1.4) drop-shadow(0 0 8px rgba(0, 255, 0, 0.4))' : 'none'};
+  transition: filter 0.3s ease;
   
   @media (max-width: 768px) {
     height: 42px;
-    margin-right: 1rem;
   }
   
   @media (max-width: 600px) {
     height: 36px;
-    margin-right: 0.7rem;
   }
   
   @media (max-width: 480px) {
     height: 32px;
-    margin-right: 0.5rem;
   }
 `;
 const LogoWrap = styled.div`
@@ -72,13 +103,14 @@ const LogoWrap = styled.div`
 const LogoText = styled.div`
   font-size: 1.05rem;
   font-weight: 700;
-  color: #7f5af0;
+  color: var(--accent-primary);
   letter-spacing: 1.2px;
   margin-top: 0.1rem;
   margin-left: 0.1rem;
   font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
   opacity: 0.92;
   transition: color 0.3s ease;
+  text-shadow: ${props => props.isDark ? '0 0 10px rgba(0, 255, 0, 0.4)' : 'none'};
   
   @media (max-width: 768px) {
     font-size: 0.98rem;
@@ -290,6 +322,12 @@ const Drawer = styled.div`
     transform: ${({ open }) => (open ? 'translateX(0)' : 'translateX(100%)')};
     transition: transform 0.25s cubic-bezier(.4,0,.2,1), background 0.3s ease;
     
+    /* Ensure drawer uses updated dark theme colors */
+    &[data-theme="dark"] {
+      background: #1a1a1a;
+      box-shadow: -2px 0 16px rgba(0, 0, 0, 0.4);
+    }
+    
     @media (max-width: 480px) {
       width: 80vw;
       padding: 2rem 1.2rem 1.2rem 1.2rem;
@@ -395,12 +433,24 @@ const Navbar = () => {
   const handleDrawer = () => setDrawerOpen((v) => !v);
   const closeDrawer = () => setDrawerOpen(false);
 
+  useEffect(() => {
+    const handleCloseDrawer = () => setDrawerOpen(false);
+    window.addEventListener('closeDrawer', handleCloseDrawer);
+    return () => window.removeEventListener('closeDrawer', handleCloseDrawer);
+  }, []);
+
   return (
-    <Nav>
+    <Nav data-theme={isDark ? "dark" : "light"}>
       <NavContainer>
         <LogoWrap>
-          <LogoImg src="https://static.wixstatic.com/media/6a53a1_11091e9fa1f840a396dcae740a2213d5~mv2.png/v1/fill/w_714,h_182,al_c,lg_1,q_85,enc_avif,quality_auto/New%20Project%20(1).png" alt="Elegance Interior Logo" />
-          <LogoText>Elegance Interiors</LogoText>
+          <LogoWrapper isDark={isDark}>
+            <LogoImg 
+              src="https://static.wixstatic.com/media/6a53a1_11091e9fa1f840a396dcae740a2213d5~mv2.png/v1/fill/w_714,h_182,al_c,lg_1,q_85,enc_avif,quality_auto/New%20Project%20(1).png" 
+              alt="Elegance Interior Logo" 
+              isDark={isDark}
+            />
+          </LogoWrapper>
+          <LogoText isDark={isDark}>Elegance Interiors</LogoText>
         </LogoWrap>
         <NavLinks>
           <NavLink to="home" smooth={true} duration={500} spy={true} offset={-80} activeClass="active"><FaHome /> Home</NavLink>
@@ -415,7 +465,7 @@ const Navbar = () => {
         </Hamburger>
       </NavContainer>
       <DrawerOverlay open={drawerOpen} onClick={closeDrawer} />
-      <Drawer open={drawerOpen}>
+      <Drawer open={drawerOpen} data-theme={isDark ? "dark" : "light"}>
         <DrawerClose onClick={closeDrawer} aria-label="Close navigation menu">
           <FaTimes />
         </DrawerClose>

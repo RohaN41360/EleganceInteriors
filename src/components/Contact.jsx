@@ -7,7 +7,7 @@ import { FaPhoneAlt, FaEnvelope, FaInstagram, FaUser, FaPhone, FaCommentDots } f
 
 const Section = styled.section`
   padding: 5rem 1rem 2rem 1rem;
-  background: var(--bg-section);
+  background: var(--bg-primary);
   backdrop-filter: blur(10px);
   transition: all 0.3s ease;
   
@@ -345,7 +345,7 @@ const StyledTextArea = styled.textarea`
   }
 `;
 const Button = styled(motion.button)`
-  background: linear-gradient(135deg, var(--cta-color, #1a3c2e) 0%, var(--accent-primary, #2d5a4a) 100%);
+  background: #1a3c2e;
   color: #fff;
   padding: 0.8rem 2.2rem;
   border-radius: 30px;
@@ -369,20 +369,6 @@ const Button = styled(motion.button)`
     transition: left 0.5s ease;
   }
   
-  &::after {
-    content: '';
-    position: absolute;
-    top: -2px;
-    left: -2px;
-    right: -2px;
-    bottom: -2px;
-    background: linear-gradient(135deg, #e6b17a, #7f5af0, #e6b17a);
-    border-radius: 32px;
-    opacity: 0;
-    transition: all 0.4s ease;
-    z-index: -1;
-  }
-  
   @media (max-width: 768px) {
     padding: 0.7rem 1.8rem;
     font-size: 1rem;
@@ -394,17 +380,13 @@ const Button = styled(motion.button)`
   }
   
   &:hover, &:focus {
-    background: linear-gradient(135deg, #e6b17a 0%, #7f5af0 100%);
+    background: #2d5a4a;
     color: #fff;
     transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(230, 177, 122, 0.3);
+    box-shadow: 0 8px 25px rgba(26, 60, 46, 0.3);
     
     &::before {
       left: 100%;
-    }
-    
-    &::after {
-      opacity: 1;
     }
   }
 `;
@@ -552,8 +534,8 @@ const Contact = () => {
       <Container initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
         <Info>
           <InfoTitle>Contact Information</InfoTitle>
-          <InfoItem><FaPhoneAlt color="#1a3c2e" /> +91 88064 14374</InfoItem>
-          <InfoItem><FaEnvelope color="#1a3c2e" /> info@eleganceinteriors.com</InfoItem>
+          <InfoItem><FaPhoneAlt color="#1a3c2e" /> +91 8806414374</InfoItem>
+          <InfoItem><FaEnvelope color="#1a3c2e" /> eleganceinterior4868@gmail.com</InfoItem>
           <InstaLink href="https://www.instagram.com/elegance_interiors_pune/?igsh=MWdwcWR0bmo4cm5keg%3D%3D" target="_blank" rel="noopener noreferrer"><FaInstagram color="#1a3c2e" /> elegance_interiors_pune</InstaLink>
         </Info>
         <FormWrap>

@@ -8,7 +8,7 @@ import { collection, getDocs, query, where } from 'firebase/firestore';
 
 const Section = styled.section`
   padding: 5rem 1rem 2rem 1rem;
-  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+  background: var(--bg-secondary);
   transition: all 0.3s ease;
   
   @media (max-width: 768px) {
@@ -67,11 +67,15 @@ const ReviewCard = styled.div`
   padding: 2.5rem 2rem;
   box-shadow: 0 8px 32px var(--shadow-color);
   max-width: 450px;
+  width: 100%;
+  min-height: 340px;
+  height: 340px;
   margin: 0 auto;
   border: 1px solid var(--border-color);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   position: relative;
   overflow: hidden;
+  box-sizing: border-box;
   
   &::before {
     content: '"';
@@ -86,11 +90,15 @@ const ReviewCard = styled.div`
   @media (max-width: 768px) {
     padding: 2rem 1.5rem;
     max-width: 400px;
+    min-height: 320px;
+    height: 320px;
   }
   
   @media (max-width: 480px) {
     padding: 1.5rem 1.2rem;
     max-width: 350px;
+    min-height: 280px;
+    height: 280px;
   }
   
   &:hover {

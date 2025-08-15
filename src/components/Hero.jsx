@@ -17,6 +17,7 @@ const HeroSection = styled.section`
   padding: 4rem 1rem 2rem 1rem;
   overflow: hidden;
   transition: all 0.3s ease;
+  background-color: var(--bg-primary);
   
   @media (max-width: 768px) {
     min-height: 80vh;

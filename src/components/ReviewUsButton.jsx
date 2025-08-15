@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaStar, FaUser, FaEnvelope, FaCommentDots, FaTimes, FaHeart } from 'react-icons/fa';
@@ -9,7 +9,7 @@ const Button = styled(motion.button)`
   position: fixed;
   bottom: 100px;
   right: 24px;
-  background: linear-gradient(135deg, var(--cta-color, #e6b17a) 0%, var(--accent-primary, #7f5af0) 100%);
+  background: linear-gradient(135deg, #e6b17a 0%, #7f5af0 100%);
   color: #fff;
   border: none;
   padding: 1rem 1.5rem;
@@ -40,8 +40,8 @@ const Button = styled(motion.button)`
   @media (max-width: 480px) {
     bottom: 90px;
     right: 24px;
-    width: 56px;
-    height: 56px;
+    width: 50px;
+    height: 50px;
     padding: 0;
     border-radius: 50%;
     display: flex;
@@ -53,8 +53,8 @@ const Button = styled(motion.button)`
   @media (max-width: 360px) {
     bottom: 85px;
     right: 24px;
-    width: 50px;
-    height: 50px;
+    width: 48px;
+    height: 48px;
   }
 `;
 
@@ -93,27 +93,25 @@ const ModalOverlay = styled(motion.div)`
   z-index: 10000;
   backdrop-filter: blur(10px);
   padding: 1rem;
+  overflow: hidden;
+  /* Ensure modal overlay doesn't interfere with scroll */
+  -webkit-overflow-scrolling: touch;
 `;
 
-const Modal = styled(motion.div)`
-  background: #fff;
-  border-radius: 20px;
-  padding: 2.5rem;
-  max-width: 600px;
-  width: 100%;
-  max-height: 90vh;
-  overflow-y: auto;
+const Modal = styled.div`
+  background: var(--bg-secondary, #fff);
+  color: var(--text-primary);
+  border-radius: 18px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+  padding: 2.5rem 2.2rem 2.2rem 2.2rem;
+  max-width: 480px;
+  width: 95vw;
+  margin: 0 auto;
   position: relative;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-  
-  @media (max-width: 768px) {
-    padding: 2rem;
-    max-height: 95vh;
-  }
-  
-  @media (max-width: 480px) {
-    padding: 1.5rem;
-    border-radius: 16px;
+  z-index: 10001;
+  @media (max-width: 600px) {
+    padding: 1.2rem 0.5rem 1.2rem 0.5rem;
+    max-width: 99vw;
   }
 `;
 
@@ -145,7 +143,7 @@ const CloseButton = styled.button`
 
 const ModalTitle = styled.h2`
   font-size: 2rem;
-  color: #1a3c2e;
+  color: var(--text-primary);
   margin-bottom: 0.5rem;
   font-weight: 700;
   text-align: center;
@@ -162,7 +160,7 @@ const ModalTitle = styled.h2`
 
 const ModalSubtitle = styled.p`
   text-align: center;
-  color: #666;
+  color: var(--text-primary);
   margin-bottom: 2rem;
   font-size: 1rem;
   
@@ -454,6 +452,104 @@ const ReviewUsButton = () => {
   const [hoveredRating, setHoveredRating] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
+  const modalRef = useRef(null);
+
+  // Handle modal scroll isolation
+  useEffect(() => {
+    if (isOpen) {
+      // Store original body styles
+      const originalStyle = window.getComputedStyle(document.body);
+      const scrollY = window.scrollY;
+      
+      // Disable Lenis smooth scrolling when modal is open
+      const lenisInstance = window.lenis;
+      if (lenisInstance && lenisInstance.stop) {
+        lenisInstance.stop();
+      }
+      
+      // Prevent body scroll and lock position
+      document.body.style.overflow = 'hidden';
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = '100%';
+      
+      // Store scroll position for restoration
+      document.body.dataset.scrollY = scrollY.toString();
+      
+      // Focus the modal for better accessibility
+      if (modalRef.current) {
+        modalRef.current.focus();
+      }
+    } else {
+      // Re-enable Lenis smooth scrolling when modal is closed
+      const lenisInstance = window.lenis;
+      if (lenisInstance && lenisInstance.start) {
+        lenisInstance.start();
+      }
+      
+      // Restore body scroll and position
+      const scrollY = document.body.dataset.scrollY;
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      
+      // Restore scroll position
+      if (scrollY) {
+        window.scrollTo(0, parseInt(scrollY));
+        delete document.body.dataset.scrollY;
+      }
+    }
+
+    // Cleanup function
+    return () => {
+      const lenisInstance = window.lenis;
+      if (lenisInstance && lenisInstance.start) {
+        lenisInstance.start();
+      }
+      
+      const scrollY = document.body.dataset.scrollY;
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      
+      if (scrollY) {
+        window.scrollTo(0, parseInt(scrollY));
+        delete document.body.dataset.scrollY;
+      }
+    };
+  }, [isOpen]);
+
+  // Handle modal scroll events
+  const handleModalScroll = useCallback((e) => {
+    e.stopPropagation();
+  }, []);
+
+  // Handle modal wheel events
+  const handleModalWheel = useCallback((e) => {
+    e.stopPropagation();
+  }, []);
+
+  // Handle modal key events for accessibility
+  const handleModalKeyDown = useCallback((e) => {
+    if (e.key === 'Escape') {
+      closeModal();
+    }
+  }, []);
+
+  // Handle modal touch events for mobile
+  const handleModalTouchStart = useCallback((e) => {
+    e.stopPropagation();
+  }, []);
+
+  const handleModalTouchMove = useCallback((e) => {
+    e.stopPropagation();
+  }, []);
+
+  const handleModalTouchEnd = useCallback((e) => {
+    e.stopPropagation();
+  }, []);
 
   const handleInputChange = (e) => {
     setFormData({
@@ -550,7 +646,14 @@ const ReviewUsButton = () => {
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.8, opacity: 0 }}
-              onClick={(e) => e.stopPropagation()}
+              onClick={handleModalScroll}
+              onWheel={handleModalWheel}
+              onKeyDown={handleModalKeyDown}
+              onTouchStart={handleModalTouchStart}
+              onTouchMove={handleModalTouchMove}
+              onTouchEnd={handleModalTouchEnd}
+              ref={modalRef}
+              tabIndex={-1}
             >
               <CloseButton onClick={closeModal}>
                 <FaTimes />
