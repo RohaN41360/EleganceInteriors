@@ -98,70 +98,20 @@ const ModalOverlay = styled(motion.div)`
   -webkit-overflow-scrolling: touch;
 `;
 
-const Modal = styled(motion.div)`
-  background: #fff;
-  border-radius: 20px;
-  padding: 2.5rem;
-  max-width: 600px;
-  width: 100%;
-  max-height: 90vh;
-  overflow-y: auto;
-  overflow-x: hidden;
+const Modal = styled.div`
+  background: var(--bg-secondary, #fff);
+  color: var(--text-primary);
+  border-radius: 18px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+  padding: 2.5rem 2.2rem 2.2rem 2.2rem;
+  max-width: 480px;
+  width: 95vw;
+  margin: 0 auto;
   position: relative;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-  scrollbar-width: thin;
-  scrollbar-color: #cbd5e0 #f1f5f9;
-  
-  /* Force scroll behavior */
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior: contain;
-  
-  /* Isolate scrolling completely */
-  isolation: isolate;
-  
-  /* Prevent any external scroll interference */
-  & * {
-    overscroll-behavior: contain;
-  }
-  
-  /* Webkit scrollbar styles */
-  &::-webkit-scrollbar {
-    width: 8px;
-  }
-  
-  &::-webkit-scrollbar-track {
-    background: #f1f5f9;
-    border-radius: 4px;
-  }
-  
-  &::-webkit-scrollbar-thumb {
-    background: #cbd5e0;
-    border-radius: 4px;
-  }
-  
-  &::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
-  }
-  
-  /* Ensure modal content is scrollable */
-  & > * {
-    overscroll-behavior: contain;
-  }
-  
-  /* Force modal to be the only scrollable element */
-  &:focus {
-    outline: none;
-  }
-  
-  @media (max-width: 768px) {
-    padding: 2rem;
-    max-height: 95vh;
-  }
-  
-  @media (max-width: 480px) {
-    padding: 1.5rem;
-    border-radius: 16px;
-    max-height: 98vh;
+  z-index: 10001;
+  @media (max-width: 600px) {
+    padding: 1.2rem 0.5rem 1.2rem 0.5rem;
+    max-width: 99vw;
   }
 `;
 
@@ -193,7 +143,7 @@ const CloseButton = styled.button`
 
 const ModalTitle = styled.h2`
   font-size: 2rem;
-  color: #1a3c2e;
+  color: var(--text-primary);
   margin-bottom: 0.5rem;
   font-weight: 700;
   text-align: center;
@@ -210,7 +160,7 @@ const ModalTitle = styled.h2`
 
 const ModalSubtitle = styled.p`
   text-align: center;
-  color: #666;
+  color: var(--text-primary);
   margin-bottom: 2rem;
   font-size: 1rem;
   

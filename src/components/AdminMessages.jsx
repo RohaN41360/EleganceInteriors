@@ -740,7 +740,7 @@ export default function AdminMessages() {
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(10);
   const [totalItems, setTotalItems] = useState(0);
   const [lastDocs, setLastDocs] = useState([]); // Array to store last docs for each page
   const [hasMore, setHasMore] = useState(true);

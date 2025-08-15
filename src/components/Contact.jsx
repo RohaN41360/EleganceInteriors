@@ -535,7 +535,7 @@ const Contact = () => {
         <Info>
           <InfoTitle>Contact Information</InfoTitle>
           <InfoItem><FaPhoneAlt color="#1a3c2e" /> +91 8806414374</InfoItem>
-          <InfoItem><FaEnvelope color="#1a3c2e" /> info@eleganceinteriors.com</InfoItem>
+          <InfoItem><FaEnvelope color="#1a3c2e" /> eleganceinterior4868@gmail.com</InfoItem>
           <InstaLink href="https://www.instagram.com/elegance_interiors_pune/?igsh=MWdwcWR0bmo4cm5keg%3D%3D" target="_blank" rel="noopener noreferrer"><FaInstagram color="#1a3c2e" /> elegance_interiors_pune</InstaLink>
         </Info>
         <FormWrap>

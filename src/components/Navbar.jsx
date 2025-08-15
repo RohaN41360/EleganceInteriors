@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import { FaHammer, FaHome, FaStar, FaEnvelope, FaBars, FaTimes, FaSun, FaMoon, FaBuilding } from 'react-icons/fa';
 import { Link } from 'react-scroll';
@@ -432,6 +432,12 @@ const Navbar = () => {
 
   const handleDrawer = () => setDrawerOpen((v) => !v);
   const closeDrawer = () => setDrawerOpen(false);
+
+  useEffect(() => {
+    const handleCloseDrawer = () => setDrawerOpen(false);
+    window.addEventListener('closeDrawer', handleCloseDrawer);
+    return () => window.removeEventListener('closeDrawer', handleCloseDrawer);
+  }, []);
 
   return (
     <Nav data-theme={isDark ? "dark" : "light"}>

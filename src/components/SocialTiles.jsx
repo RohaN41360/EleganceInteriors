@@ -228,10 +228,10 @@ const socialData = [
     icon: <FaEnvelope />,
     title: "Email",
     description: "Send us detailed project requirements and get comprehensive quotes",
-    contact: "info@elegance.com",
+    contact: "eleganceinterior4868@gmail.com",
     bgColor: "#7f5af0",
     hoverBgColor: "#6b4fd8",
-    href: "mailto:info@elegance.com"
+    href: "mailto:eleganceinterior4868@gmail.com"
   },
   {
     id: 4,
@@ -256,13 +256,15 @@ const socialData = [
 ];
 
 const SocialTiles = () => {
+  // Filter out Facebook tile
+  const filteredSocialData = socialData.filter(social => social.title !== 'Facebook');
   return (
     <SocialSection id="social">
       <Title>Connect With Us</Title>
       <Subtitle>Get in touch with us through your preferred platform</Subtitle>
       
       <TilesContainer>
-        {socialData.map((social, index) => (
+        {filteredSocialData.map((social, index) => (
           <SocialTile
             key={social.id}
             as="a"
