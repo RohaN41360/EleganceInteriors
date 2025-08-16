@@ -1,0 +1,94 @@
+/* Smooth Scrolling Styles */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+/* Parallax Provider */
+.parallax-provider {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Parallax Element */
+.parallax-element {
+  position: relative;
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Smooth scroll performance optimizations */
+* {
+  box-sizing: border-box;
+}
+
+/* Optimize for smooth scrolling */
+.smooth-scroll-container {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Parallax background elements */
+.parallax-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  will-change: transform;
+}
+
+/* Floating elements with parallax */
+.floating-element {
+  position: absolute;
+  will-change: transform;
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(180deg);
+  }
+}
+
+/* Smooth scroll performance for images */
+img {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+/* Optimize for mobile */
+@media (max-width: 768px) {
+  .parallax-element {
+    transform: none !important;
+  }
+  
+  .floating-element {
+    animation: none;
+  }
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  .parallax-element {
+    transform: none !important;
+  }
+  
+  .floating-element {
+    animation: none;
+  }
+  
+  html {
+    scroll-behavior: auto;
+  }
+} 

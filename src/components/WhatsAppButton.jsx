@@ -18,13 +18,38 @@ const FloatingBtn = styled.a`
   box-shadow: 0 2px 8px rgba(0,0,0,0.18);
   z-index: 2000;
   transition: background 0.2s;
+  
   &:hover {
     background: #128c7e;
+  }
+  
+  @media (max-width: 768px) {
+    bottom: 24px;
+    right: 24px;
+    width: 50px;
+    height: 50px;
+    font-size: 1.8rem;
+  }
+  
+  @media (max-width: 480px) {
+    bottom: 24px;
+    right: 24px;
+    width: 48px;
+    height: 48px;
+    font-size: 1.6rem;
+  }
+  
+  @media (max-width: 360px) {
+    bottom: 24px;
+    right: 24px;
+    width: 45px;
+    height: 45px;
+    font-size: 1.5rem;
   }
 `;
 
 const WhatsAppButton = () => (
-  <FloatingBtn href="https://wa.me/917499052825" target="_blank" rel="noopener noreferrer" title="Chat on WhatsApp">
+  <FloatingBtn href="https://wa.me/918806414374" target="_blank" rel="noopener noreferrer" title="Chat on WhatsApp">
     <FaWhatsapp />
   </FloatingBtn>
 );

@@ -1,0 +1,73 @@
+.section-error-boundary {
+  padding: 20px;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  background: #f8f9fa;
+  margin: 20px 0;
+}
+
+.section-error-container {
+  text-align: center;
+}
+
+.section-error-icon {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.section-error-container h3 {
+  color: #333;
+  margin-bottom: 8px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.section-error-container p {
+  color: #666;
+  margin-bottom: 15px;
+  line-height: 1.5;
+}
+
+.section-error-details {
+  margin: 15px 0;
+  text-align: left;
+}
+
+.section-error-details summary {
+  cursor: pointer;
+  color: #007bff;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.section-error-stack {
+  background: white;
+  border: 1px solid #e9ecef;
+  border-radius: 4px;
+  padding: 10px;
+  font-size: 11px;
+  overflow-x: auto;
+  color: #dc3545;
+  white-space: pre-wrap;
+}
+
+.section-error-actions {
+  display: flex;
+  justify-content: center;
+}
+
+.section-retry-button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  background: #007bff;
+  color: white;
+  transition: background 0.2s ease;
+}
+
+.section-retry-button:hover {
+  background: #0056b3;
+} 
