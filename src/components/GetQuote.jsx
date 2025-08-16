@@ -324,6 +324,24 @@ const ButtonWrapper = styled.div`
   margin-bottom: 2rem;
 `;
 
+const SuccessMessage = styled(motion.div)`
+  background: #d4edda;
+  color: #155724;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+  text-align: center;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  @media (max-width: 480px) {
+    padding: 0.8rem;
+    font-size: 0.9rem;
+  }
+`;
+
 const GetQuote = () => {
   const [formVals, setFormVals] = useState({ name: '', email: '', phone: '', message: '', projectType: '', budgetRange: '' });
   const [focus, setFocus] = useState({});
@@ -332,6 +350,7 @@ const GetQuote = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMsg, setModalMsg] = useState('');
   const [modalType, setModalType] = useState('success');
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const modalRef = useRef(null);
 
   // Scroll isolation and body lock (like ReviewUsButton)
@@ -420,11 +439,21 @@ const GetQuote = () => {
       setModalType('success');
       setFormVals({ name: '', email: '', phone: '', message: '', projectType: '', budgetRange: '' });
       setFocus({});
-      setTimeout(() => setModalOpen(false), 1500);
+      setShowSuccessModal(true);
+      setTimeout(() => {
+        setShowSuccessModal(false);
+        setModalOpen(false);
+      }, 5000);
     } catch (e) {
       setModalMsg('Something went wrong. Please try again.');
       setModalType('error');
     }
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    setSent(false);
+    setModalMsg('');
   };
 
   return (
@@ -448,7 +477,7 @@ const GetQuote = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => setModalOpen(false)}
+              onClick={handleCloseModal}
             >
               <ModalDialog
                 initial={{ scale: 0.8, opacity: 0 }}
@@ -463,7 +492,7 @@ const GetQuote = () => {
                 ref={modalRef}
                 tabIndex={-1}
               >
-                <ModalClose onClick={() => setModalOpen(false)}>&times;</ModalClose>
+                <ModalClose onClick={handleCloseModal}>&times;</ModalClose>
                 <Title style={{textAlign: 'center'}}>Request a Custom Quote</Title>
                 <Intro style={{textAlign: 'center'}}>Fill out the form and our team will get back to you soon with a personalized estimate.</Intro>
                 <StyledForm autoComplete="on" onSubmit={sendQuote}>
@@ -556,14 +585,21 @@ const GetQuote = () => {
                   <ButtonWrapper>
                     <Button type="submit" whileTap={{ scale: 0.95 }}>Request Quote</Button>
                   </ButtonWrapper>
-                  {modalMsg && (
-                    <ErrorMsg style={{ color: modalType === 'success' ? '#1a3c2e' : '#ff5959' }}>{modalMsg}</ErrorMsg>
-                  )}
                 </StyledForm>
               </ModalDialog>
             </ModalOverlay>
           )}
         </AnimatePresence>,
+        document.body
+      )}
+      {showSuccessModal && modalType === 'success' && modalMsg && ReactDOM.createPortal(
+        <ModalOverlay>
+          <ModalDialog>
+            <ModalClose onClick={() => { setShowSuccessModal(false); setModalOpen(false); }}>&times;</ModalClose>
+            <SuccessMessage>{modalMsg}</SuccessMessage>
+            <div style={{color:'#888',fontSize:'0.98rem',textAlign:'center'}}>This will close automatically in 5 seconds.</div>
+          </ModalDialog>
+        </ModalOverlay>,
         document.body
       )}
     </>

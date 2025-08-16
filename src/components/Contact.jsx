@@ -402,6 +402,24 @@ const ErrorMsg = styled.p`
   margin-top: -0.7rem;
 `;
 
+const SuccessMessage = styled.p`
+  background: #d4edda;
+  color: #155724;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+  text-align: center;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  @media (max-width: 480px) {
+    padding: 0.8rem;
+    font-size: 0.9rem;
+  }
+`;
+
 const ModalOverlay = styled.div`
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
@@ -477,6 +495,7 @@ const Contact = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalMsg, setModalMsg] = useState('');
   const [modalType, setModalType] = useState('success'); // 'success' or 'error'
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const handleChange = e => {
     setFormVals({ ...formVals, [e.target.name]: e.target.value });
@@ -515,6 +534,8 @@ const Contact = () => {
       setShowModal(true);
       setFormVals({ name: '', email: '', phone: '', message: '' });
       setFocus({});
+      setShowSuccessModal(true);
+      setTimeout(() => setShowSuccessModal(false), 5000);
     } catch (e) {
       setModalMsg('Something went wrong. Please try again.');
       setModalType('error');
@@ -599,17 +620,20 @@ const Contact = () => {
             <Button type="submit" whileTap={{ scale: 0.95 }}>Send Message</Button>
             {error && <ErrorMsg>{error}</ErrorMsg>}
             {/* Modal for success/error */}
-            {showModal && (
+            {showModal && modalType === 'error' && (
               <ModalOverlay onClick={()=>setShowModal(false)}>
                 <Modal onClick={e=>e.stopPropagation()}>
                   <ModalClose onClick={()=>setShowModal(false)}>&times;</ModalClose>
-                  <div style={{
-                    color: modalType==='success' ? '#1a3c2e' : '#ff5959',
-                    fontWeight: 700,
-                    fontSize: '1.15rem',
-                    textAlign: 'center',
-                    marginBottom: '0.7rem',
-                  }}>{modalMsg}</div>
+                  <div style={{ color: '#ff5959', fontWeight: 700, fontSize: '1.15rem', textAlign: 'center', marginBottom: '0.7rem' }}>{modalMsg}</div>
+                  <div style={{color:'#888',fontSize:'0.98rem',textAlign:'center'}}>This will close automatically in 5 seconds.</div>
+                </Modal>
+              </ModalOverlay>
+            )}
+            {showSuccessModal && modalType === 'success' && modalMsg && (
+              <ModalOverlay>
+                <Modal>
+                  <ModalClose onClick={() => setShowSuccessModal(false)}>&times;</ModalClose>
+                  <SuccessMessage>{modalMsg}</SuccessMessage>
                   <div style={{color:'#888',fontSize:'0.98rem',textAlign:'center'}}>This will close automatically in 5 seconds.</div>
                 </Modal>
               </ModalOverlay>

@@ -452,6 +452,7 @@ const ReviewUsButton = () => {
   const [hoveredRating, setHoveredRating] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const modalRef = useRef(null);
 
   // Handle modal scroll isolation
@@ -593,12 +594,10 @@ const ReviewUsButton = () => {
         type: 'success', 
         text: 'Thank you for your feedback!' 
       });
+      setIsOpen(false);
+      setShowSuccessModal(true);
+      setTimeout(() => setShowSuccessModal(false), 5000);
       
-      // Close modal after 2 seconds
-      setTimeout(() => {
-        setIsOpen(false);
-        setMessage({ type: '', text: '' });
-      }, 2000);
     } catch (error) {
       console.error('Error submitting review:', error);
       setMessage({ 
@@ -757,6 +756,19 @@ const ReviewUsButton = () => {
           </ModalOverlay>
         )}
       </AnimatePresence>
+      {showSuccessModal && message.type === 'success' && message.text && (
+        <ModalOverlay>
+          <Modal>
+            <CloseButton onClick={() => setShowSuccessModal(false)}>
+              <FaTimes />
+            </CloseButton>
+            <SuccessMessage>
+              <FaHeart /> {message.text}
+            </SuccessMessage>
+            <div style={{color:'#888',fontSize:'0.98rem',textAlign:'center'}}>This will close automatically in 5 seconds.</div>
+          </Modal>
+        </ModalOverlay>
+      )}
     </>
   );
 };
