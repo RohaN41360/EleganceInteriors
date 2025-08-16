@@ -141,15 +141,18 @@ const NavContainer = styled.div`
   padding: 0 2rem;
   justify-content: space-between;
   min-height: 60px;
-  
-  @media (max-width: 768px) {
-    padding: 0 1rem;
+  overflow-x: auto;
+  @media (max-width: 900px) {
+    padding: 0 0.5rem;
     min-height: 50px;
   }
-  
+  @media (max-width: 768px) {
+    padding: 0 0.2rem;
+    min-height: 48px;
+  }
   @media (max-width: 480px) {
-    padding: 0 0.8rem;
-    min-height: 45px;
+    padding: 0 0.1rem;
+    min-height: 44px;
   }
 `;
 
@@ -225,7 +228,7 @@ const MobileNav = styled.div`
 const NavItem = styled.button`
   background: none;
   border: none;
-  padding: 1.2rem 2rem;
+  padding: 1rem 1.5rem;
   font-size: 1rem;
   font-weight: 600;
   color: ${props => props.active ? '#1a3c2e' : '#666'};
@@ -237,40 +240,22 @@ const NavItem = styled.button`
   transition: all 0.3s ease;
   position: relative;
   white-space: nowrap;
-  min-height: 44px; /* Touch target minimum */
-  
-  &:hover {
-    color: #1a3c2e;
-    background: rgba(230, 177, 122, 0.1);
-  }
-  
-  &:active {
-    background: rgba(230, 177, 122, 0.2);
-  }
-  
-  svg {
-    font-size: 1.1rem;
-  }
-  
-  @media (max-width: 768px) {
-    padding: 1rem 1.5rem;
-    font-size: 0.9rem;
+  min-height: 44px;
+  @media (max-width: 900px) {
+    padding: 0.8rem 1rem;
+    font-size: 0.92rem;
     gap: 0.5rem;
-    width: 100%;
-    justify-content: flex-start;
-    border-bottom: 1px solid #f0f0f0;
-    border-right: none;
-    min-height: 48px; /* Larger touch target for mobile */
-    
-    &:last-child {
-      border-bottom: none;
-    }
   }
-  
-  @media (max-width: 480px) {
-    padding: 0.8rem 1.2rem;
+  @media (max-width: 768px) {
+    padding: 0.7rem 0.7rem;
     font-size: 0.85rem;
-    min-height: 44px;
+    gap: 0.4rem;
+    min-height: 40px;
+  }
+  @media (max-width: 600px) {
+    padding: 0.5rem 0.5rem;
+    font-size: 0.8rem;
+    min-height: 36px;
   }
 `;
 

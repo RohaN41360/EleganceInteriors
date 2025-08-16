@@ -731,6 +731,57 @@ const EmptyText = styled.p`
   font-size: 0.9rem;
 `;
 
+// Find the table container (e.g., TableWrapper or similar) and add:
+const TableWrapper = styled.div`
+  width: 100vw;
+  max-width: 100vw;
+  overflow-x: auto;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  background: var(--bg-primary);
+  height: calc(100vh - 220px);
+  @media (max-width: 900px) { min-width: 700px; }
+  &::-webkit-scrollbar { height: 10px; background: #f1f1f1; }
+  &::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 6px; }
+`;
+const Table = styled.table`
+  width: 1100px;
+  min-width: 1100px;
+  border-collapse: collapse;
+  @media (max-width: 768px) { min-width: 900px; }
+  @media (max-width: 480px) { min-width: 700px; }
+`;
+const Th = styled.th`
+  background: var(--bg-secondary);
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-color);
+  @media (max-width: 768px) { padding: 0.8rem; font-size: 0.9rem; }
+  @media (max-width: 480px) { padding: 0.6rem; font-size: 0.85rem; }
+`;
+const Td = styled.td`
+  padding: 1rem 0.8rem;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  vertical-align: middle;
+  &:hover { background-color: rgba(230, 177, 122, 0.05); }
+  select, input, button { pointer-events: auto; }
+  @media (max-width: 768px) { padding: 0.8rem 0.5rem; font-size: 0.9rem; }
+  @media (max-width: 480px) { padding: 0.6rem 0.3rem; font-size: 0.85rem; }
+`;
+const Tr = styled.tr`
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  min-height: 60px;
+  height: 60px;
+  &:hover { background-color: rgba(230, 177, 122, 0.05); }
+  select, input, button { pointer-events: auto; }
+`;
+
 export default function AdminMessages() {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -949,62 +1000,52 @@ export default function AdminMessages() {
           </EmptyText>
         </EmptyState>
       ) : (
-        <MessagesGrid>
-          {filteredMessages.map((message) => (
-            <MessageCard
-              key={message.id}
-              className={!message.read ? 'unread' : ''}
-              onClick={() => handleView(message)}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              whileHover={{ y: -2 }}
-            >
-              <MessageHeader>
-                <MessageInfo>
-                  <MessageName>{message.name || 'Anonymous'}</MessageName>
-                  <MessageEmail>{message.email}</MessageEmail>
-                  {message.phone && <MessagePhone>{message.phone}</MessagePhone>}
-                  <StatusBadge read={message.read}>
-                    {message.read ? 'Read' : 'Unread'}
-                  </StatusBadge>
-                </MessageInfo>
-                <MessageDate>
-                  <FaCalendarAlt style={{ marginRight: '0.3rem' }} />
-                  {formatDate(message.createdAt)}
-                </MessageDate>
-              </MessageHeader>
-              
-              <MessageContent>{message.message}</MessageContent>
-              
-              <MessageActions>
-                <ActionButton
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleView(message);
-                  }}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <FaEye />
-                  View
-                </ActionButton>
-                
-                <ActionButton
-                  className="delete"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleDelete(message.id);
-                  }}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <FaTrash />
-                  Delete
-                </ActionButton>
-              </MessageActions>
-            </MessageCard>
-          ))}
-        </MessagesGrid>
+        <TableWrapper>
+          <Table>
+            <thead>
+              <tr>
+                <Th>Name</Th>
+                <Th>Email</Th>
+                <Th>Phone</Th>
+                <Th>Message</Th>
+                <Th>Date</Th>
+                <Th>Status</Th>
+                <Th>Actions</Th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredMessages.map(message => (
+                <Tr key={message.id} onClick={() => handleView(message)}>
+                  <Td>{message.name || 'Anonymous'}</Td>
+                  <Td>{message.email}</Td>
+                  <Td>{message.phone || '-'}</Td>
+                  <Td style={{ maxWidth: '220px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{message.message}</Td>
+                  <Td>{formatDate(message.createdAt)}</Td>
+                  <Td>
+                    <StatusBadge read={message.read}>{message.read ? 'Read' : 'Unread'}</StatusBadge>
+                  </Td>
+                  <Td>
+                    <ActionButton
+                      onClick={e => { e.stopPropagation(); handleView(message); }}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <FaEye /> View
+                    </ActionButton>
+                    <ActionButton
+                      className="delete"
+                      onClick={e => { e.stopPropagation(); handleDelete(message.id); }}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <FaTrash /> Delete
+                    </ActionButton>
+                  </Td>
+                </Tr>
+              ))}
+            </tbody>
+          </Table>
+        </TableWrapper>
       )}
 
       <Pagination

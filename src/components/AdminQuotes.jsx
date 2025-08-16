@@ -214,18 +214,24 @@ const TableContainer = styled.div`
   }
 `;
 
+const TableWrapper = styled.div`
+  width: 100vw;
+  max-width: 100vw;
+  overflow-x: auto;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  background: var(--bg-primary);
+  height: calc(100vh - 220px);
+  @media (max-width: 900px) { min-width: 700px; }
+  &::-webkit-scrollbar { height: 10px; background: #f1f1f1; }
+  &::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 6px; }
+`;
 const Table = styled.table`
-  width: 100%;
+  width: 1100px;
+  min-width: 1100px;
   border-collapse: collapse;
-  min-width: 600px;
-  
-  @media (max-width: 768px) {
-    min-width: 500px;
-  }
-  
-  @media (max-width: 480px) {
-    min-width: 400px;
-  }
+  @media (max-width: 768px) { min-width: 900px; }
+  @media (max-width: 480px) { min-width: 700px; }
 `;
 
 const Th = styled.th`
@@ -841,79 +847,81 @@ const AdminQuotes = () => {
       ) : (
         <>
       <TableContainer>
-        <Table>
-          <thead>
-            <tr>
-              <Th>Name</Th>
-                  <Th>Email</Th>
-              <Th>Project Type</Th>
-              <Th>Budget</Th>
-              <Th>Status</Th>
-              <Th>Date</Th>
-              <Th>Actions</Th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredQuotes.map(quote => (
-                  <Tr key={quote.id} onClick={() => handleView(quote)}>
-                    <Td>{quote.fullName}</Td>
-                    <Td>{quote.email}</Td>
-                <Td>{getProjectTypeLabel(quote.projectType)}</Td>
-                <Td>{getBudgetLabel(quote.budgetRange)}</Td>
-                <Td>
-                      <select
-                        value={quote.status}
-                        onChange={(e) => handleStatusChange(quote.id, e.target.value)}
-                        onClick={(e) => e.stopPropagation()}
-                        style={{
-                          padding: '0.3rem 0.6rem',
-                          borderRadius: '6px',
-                          border: '1px solid var(--border-color)',
-                          background: 'var(--bg-secondary)',
-                          color: 'var(--text-primary)',
-                          fontSize: '0.8rem',
-                          cursor: 'pointer',
-                          minHeight: '32px',
-                          minWidth: '100px'
-                        }}
-                      >
-                        <option value="new">New</option>
-                        <option value="contacted">Contacted</option>
-                        <option value="quoted">Quoted</option>
-                        <option value="completed">Completed</option>
-                      </select>
-                </Td>
-                <Td>{new Date(quote.date).toLocaleDateString()}</Td>
-                <Td>
-                  <ActionButton
-                    className="view"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleView(quote);
-                        }}
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                        title="View Details"
-                  >
-                    <FaEye />
-                  </ActionButton>
-                      <ActionButton
-                        className="delete"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDelete(quote.id);
-                        }}
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        title="Delete Quote"
-                      >
-                        <FaTrash />
-                  </ActionButton>
-                </Td>
-                  </Tr>
-            ))}
-          </tbody>
-        </Table>
+        <TableWrapper>
+          <Table>
+            <thead>
+              <tr>
+                <Th>Name</Th>
+                <Th>Email</Th>
+                <Th>Project Type</Th>
+                <Th>Budget</Th>
+                <Th>Status</Th>
+                <Th>Date</Th>
+                <Th>Actions</Th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredQuotes.map(quote => (
+                    <Tr key={quote.id} onClick={() => handleView(quote)}>
+                      <Td>{quote.name || quote.fullName}</Td>
+                      <Td>{quote.email}</Td>
+                  <Td>{getProjectTypeLabel(quote.projectType)}</Td>
+                  <Td>{getBudgetLabel(quote.budgetRange)}</Td>
+                  <Td>
+                        <select
+                          value={quote.status}
+                          onChange={(e) => handleStatusChange(quote.id, e.target.value)}
+                          onClick={(e) => e.stopPropagation()}
+                          style={{
+                            padding: '0.3rem 0.6rem',
+                            borderRadius: '6px',
+                            border: '1px solid var(--border-color)',
+                            background: 'var(--bg-secondary)',
+                            color: 'var(--text-primary)',
+                            fontSize: '0.8rem',
+                            cursor: 'pointer',
+                            minHeight: '32px',
+                            minWidth: '100px'
+                          }}
+                        >
+                          <option value="new">New</option>
+                          <option value="contacted">Contacted</option>
+                          <option value="quoted">Quoted</option>
+                          <option value="completed">Completed</option>
+                        </select>
+                  </Td>
+                  <Td>{new Date(quote.date).toLocaleDateString()}</Td>
+                  <Td>
+                    <ActionButton
+                      className="view"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleView(quote);
+                          }}
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                          title="View Details"
+                    >
+                      <FaEye />
+                    </ActionButton>
+                        <ActionButton
+                          className="delete"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDelete(quote.id);
+                          }}
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                          title="Delete Quote"
+                        >
+                          <FaTrash />
+                    </ActionButton>
+                  </Td>
+                    </Tr>
+              ))}
+            </tbody>
+          </Table>
+        </TableWrapper>
       </TableContainer>
 
           <Pagination
@@ -1015,7 +1023,7 @@ const AdminQuotes = () => {
             <DetailRow>
               <DetailLabel>Description:</DetailLabel>
               <DetailValue style={{ textAlign: 'left', maxWidth: '300px' }}>
-                {selectedQuote.description}
+                {selectedQuote.message || selectedQuote.description}
               </DetailValue>
             </DetailRow>
               </ModalBody>

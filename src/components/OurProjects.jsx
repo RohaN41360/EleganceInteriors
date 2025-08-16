@@ -615,7 +615,7 @@ const OurProjects = () => {
               onClick={e => e.stopPropagation()}
             >
               <CarouselMedia>
-                {currentMediaType === 'image' ? (
+            {currentMediaType === 'image' ? (
                   <CarouselImage
                     src={currentMedia.url}
                     alt={currentMedia.name || 'Project Image'}
@@ -627,24 +627,24 @@ const OurProjects = () => {
                   />
                 ) : (
                   <CarouselVideo
-                    src={currentMedia.url}
-                    controls
-                    autoPlay
-                    muted={false}
+                src={currentMedia.url} 
+                controls
+                autoPlay
+                muted={false}
                     ref={el => setCurrentVideo(el)}
-                    onPlay={() => setIsPlaying(true)}
-                    onPause={() => setIsPlaying(false)}
+                onPlay={() => setIsPlaying(true)}
+                onPause={() => setIsPlaying(false)}
                     as={motion.video}
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -30 }}
                     transition={{ duration: 0.3 }}
-                  />
-                )}
+              />
+            )}
               </CarouselMedia>
               {/* Navigation Controls */}
-              {(currentMediaType === 'image' ? images : videos).length > 1 && (
-                <>
+            {(currentMediaType === 'image' ? images : videos).length > 1 && (
+              <>
                   <CarouselButtonPrev onClick={prevMedia} aria-label="Previous">
                     <FiChevronLeft />
                     <span style={{ position: 'absolute', left: '-9999px' }}>Previous</span>
@@ -654,10 +654,10 @@ const OurProjects = () => {
                     <span style={{ position: 'absolute', left: '-9999px' }}>Next</span>
                   </CarouselButtonNext>
                   <CarouselCounter>
-                    {currentMediaIndex + 1} / {(currentMediaType === 'image' ? images : videos).length}
+                  {currentMediaIndex + 1} / {(currentMediaType === 'image' ? images : videos).length}
                   </CarouselCounter>
-                </>
-              )}
+              </>
+            )}
               <CarouselClose onClick={closeLightbox} aria-label="Close">
                 <FiX />
                 <span style={{ position: 'absolute', left: '-9999px' }}>Close</span>
